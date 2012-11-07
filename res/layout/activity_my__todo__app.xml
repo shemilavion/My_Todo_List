@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_background" > 
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_add"
+        android:background = "@android:drawable/btn_default"
+        android:layout_alignParentLeft="true"
+        android:onClick="addTask" 
+        /> 
+    <Button
+        android:id="@+id/set_button"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_set"
+        android:background = "@android:drawable/btn_default"
+        android:layout_toRightOf="@+id/add_button"
+        android:layout_alignParentRight="true" 
+        /> 
+    <View 
+        android:id="@+id/horizontal_line"
+   		android:layout_width="fill_parent"
+   		android:layout_height="4dp"
+    	android:background="#21007F" 
+		android:layout_below="@+id/add_button"
+    	/>
+    <ListView 
+		android:id="@+id/listV_main"
+ 		android:layout_height="wrap_content"
+ 		android:layout_width="fill_parent"
+ 		android:layout_margin = "10dp"
+ 		android:divider="#21007F"
+    	android:dividerHeight="2dp" 
+ 		android:background="#404040"
+ 		android:layout_below = "@+id/horizontal_line"/>
+       
+</RelativeLayout>
