@@ -12,7 +12,7 @@
 	    android:id="@+id/Task_name"
 		android:textSize="20sp" 
 		android:textStyle="bold" 
-		android:textColor="#FFFF00" 
+		android:textColor="#FFFFFF" 
 		android:layout_width="wrap_content" 
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"/>

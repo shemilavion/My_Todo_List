@@ -41,5 +41,10 @@ public class NewTaskActivity extends Activity
     {
     	finish();
     }
+    public void createTask(View view)
+    {
+    	finish();
+    }
+    
 
 }

@@ -11,8 +11,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_back"
-        android:background = "@android:drawable/btn_default"
+        android:background = "@drawable/button_bg"
         android:layout_alignParentLeft="true"
         android:onClick="backToMainScreen" 
         /> 
+        <TextView 
+	    android:id="@+id/new_task_name"
+		android:textSize="20sp" 
+		android:textStyle="bold" 
+		android:textColor="#000000" 
+		android:background="@drawable/rounded_edges"
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:text="@string/enter_task_name"
+		android:layout_alignParentLeft="true"
+		android:layout_below="@+id/back_button"/>
+        <Button
+        android:id="@+id/create_button"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_create"
+        android:background = "@drawable/button_bg"
+        android:layout_alignParentRight="true"
+        android:onClick="createTask" 
+        android:layout_below="@+id/back_button"
+        android:layout_toRightOf="@+id/new_task_name"
+        />
 </RelativeLayout>
