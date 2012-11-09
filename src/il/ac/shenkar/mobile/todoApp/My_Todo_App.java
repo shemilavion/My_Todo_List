@@ -77,19 +77,19 @@ public class My_Todo_App extends Activity
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("wash my car", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, true );
     	results.add(taskDetails);
     	taskDetails = new Task("fix the computer", "install a new operating system",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("Update mobile os version", "Update my iphone operating system version to ios6.1",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("buy new sunglasses", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("call mom", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("call dad", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
@@ -101,44 +101,44 @@ public class My_Todo_App extends Activity
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.HIGH, true );
     	results.add(taskDetails);
     	taskDetails = new Task("update this task list", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, true );
     	results.add(taskDetails);
     	
     	taskDetails = new Task("go to the beach", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("make myself a cup of coffe", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, true );
     	results.add(taskDetails);
     	taskDetails = new Task("go to sleep", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("wash my hands", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.HIGH, false );
     	results.add(taskDetails);
     	taskDetails = new Task("eat dinner", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("clean my house", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, true );
     	results.add(taskDetails);
     	taskDetails = new Task("wash the dishes", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("draw something", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.HIGH, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.HIGH, true);
     	results.add(taskDetails);
     	taskDetails = new Task("talk with my friends", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("listen to music", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.HIGH, false );
     	results.add(taskDetails);
     	taskDetails = new Task("wakeup in time", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("dummy assignment", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, true );
     	results.add(taskDetails);
     	taskDetails = new Task("enter a new assignment", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
@@ -147,22 +147,22 @@ public class My_Todo_App extends Activity
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.HIGH, false );
     	results.add(taskDetails);
     	taskDetails = new Task("fix the car", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("tune my piano", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.LOW, true );
     	results.add(taskDetails);
     	taskDetails = new Task("replace broken valve", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, true );
     	results.add(taskDetails);
     	taskDetails = new Task("fastem my seatbelt", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
     	taskDetails = new Task("turn the tv on", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
     	results.add(taskDetails);
     	taskDetails = new Task("close this app", "",
-    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, false );
+    			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.NONE, true );
     	results.add(taskDetails);
     	//return task list to caller	
     	return results;
