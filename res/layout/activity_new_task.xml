@@ -1,42 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/add_task_bg" > 
-    <Button
-        android:id="@+id/back_button"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_width="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/add_task_bg"> 
+    
+    <EditText android:id="@+id/new_task_name"
+		android:layout_weight = "1"
+		android:layout_marginTop="6dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="4dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/button_back"
-        android:background = "@drawable/button_bg"
-        android:layout_alignParentLeft="true"
-        android:onClick="backToMainScreen" 
-        /> 
-        <TextView 
-	    android:id="@+id/new_task_name"
-		android:textSize="20sp" 
-		android:textStyle="bold" 
+		android:textSize="20sp"  
 		android:textColor="#000000" 
-		android:background="@drawable/rounded_edges"
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:text="@string/enter_task_name"
-		android:layout_alignParentLeft="true"
-		android:layout_below="@+id/back_button"/>
+		android:background="@drawable/rounded_edges" 
+		android:hint="@string/enter_task_name"/>
+
         <Button
         android:id="@+id/create_button"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="4dp"
+        android:textColor="#404040"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="4dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:text="@string/button_create"
-        android:background = "@drawable/button_bg"
-        android:layout_alignParentRight="true"
-        android:onClick="createTask" 
-        android:layout_below="@+id/back_button"
-        android:layout_toRightOf="@+id/new_task_name"
-        />
-</RelativeLayout>
+        android:background = "@drawable/dual_button"
+        android:onClick="createTask" />
+</LinearLayout>
+

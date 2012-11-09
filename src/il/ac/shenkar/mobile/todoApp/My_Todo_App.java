@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import com.example.my_todo_app.R;
+
+import android.R.color;
 import android.view.View;
 import android.os.Bundle;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -41,10 +46,19 @@ public class My_Todo_App extends Activity
         });
     }
     
-    public void addTask(View view) 		//open "add task" activity in response to button
+    @TargetApi(16)
+	public void addTask(View view) 		//open "add task" activity in response to button
     {
+    	// Get Handle for the Tab buttons
+    	Button btnTab1 = (Button) findViewById(R.id.add_button);
+    	Button btnTab2 = (Button) findViewById(R.id.add_button);
+
+    	// set the colors correctly
+    	Drawable tmp = btnTab2.getBackground();
+    	btnTab2.setBackgroundResource(color.holo_blue_dark);
     	Intent intent = new Intent(this, NewTaskActivity.class);
     	startActivity(intent);
+    	btnTab1.setBackground(tmp);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
