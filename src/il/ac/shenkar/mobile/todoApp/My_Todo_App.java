@@ -49,16 +49,8 @@ public class My_Todo_App extends Activity
     @TargetApi(16)
 	public void addTask(View view) 		//open "add task" activity in response to button
     {
-    	// Get Handle for the Tab buttons
-    	Button btnTab1 = (Button) findViewById(R.id.add_button);
-    	Button btnTab2 = (Button) findViewById(R.id.add_button);
-
-    	// set the colors correctly
-    	Drawable tmp = btnTab2.getBackground();
-    	btnTab2.setBackgroundResource(color.holo_blue_dark);
     	Intent intent = new Intent(this, NewTaskActivity.class);
     	startActivity(intent);
-    	btnTab1.setBackground(tmp);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
