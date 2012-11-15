@@ -1,35 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@drawable/add_task_bg"> 
-    
-    <EditText android:id="@+id/new_task_name"
-		android:layout_weight = "1"
-		android:layout_marginTop="6dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginBottom="4dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-		android:textSize="20sp"  
-		android:textColor="#000000" 
-		android:background="@drawable/rounded_edges" 
-		android:hint="@string/enter_task_name"/>
-
-        <Button
-        android:id="@+id/create_button"
-        android:textColor="#404040"
-        android:layout_marginTop="6dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginBottom="4dp"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/add_task_bg" >
+ 
+    <TableRow
+        android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:text="@string/button_create"
-        android:background = "@drawable/dual_button"
-        android:onClick="createTask" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip">
+		<TextView
+			android:layout_width="fill_parent"
+		  	android:layout_height="wrap_content"
+		  	android:text="@string/enter_task_details" 
+		  	android:textSize="20sp"
+		  	android:textStyle="bold"  
+			android:textColor="#FFFFFF" />
+    </TableRow>
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip">
+ 
+       <EditText android:id="@+id/new_task_name"
+			android:layout_weight = "1"
+			android:layout_marginTop="6dp"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
+	        android:layout_marginBottom="4dp"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+			android:textSize="20sp"  
+			android:textColor="#000000" 
+			android:background="@drawable/rounded_edges" 
+			android:hint="@string/enter_task_name"/>
+    </TableRow>
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip">
+        <EditText android:id="@+id/new_task_description"
+			android:layout_weight = "1"
+			android:layout_marginTop="6dp"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
+	        android:layout_marginBottom="4dp"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+			android:textSize="20sp"  
+			android:textColor="#000000" 
+			android:background="@drawable/rounded_edges" 
+			android:hint="@string/enter_task_description"/>
+    </TableRow>    
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip">
+        <Button
+           android:layout_weight = "1"
+	       android:id="@+id/new_task_date"
+	       android:textColor="#404040"
+	       android:layout_marginTop="6dp"
+	       android:layout_marginLeft="2dp"
+	       android:layout_marginRight="2dp"
+	       android:layout_marginBottom="4dp"
+	       android:layout_width="0dp"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"  
+	       android:background = "@drawable/dual_button"
+	       android:text="@string/dateRequest"
+	       android:onClick="pickDate" />
 
+    </TableRow>
+    <TableRow
+        android:id="@+id/tableRow5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip">
+        <TextView
+			android:layout_width="fill_parent"
+		  	android:layout_height="wrap_content"
+		  	android:text="@string/priority_prompt" 
+		  	android:textSize="20sp"  
+			android:textColor="#FFFFFF" />         
+        <Spinner
+        android:id="@+id/priority_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:textColor="#404040" 
+		android:background="@drawable/rounded_edges" />
+    </TableRow>    
+
+    <TableRow
+        android:id="@+id/tableRow6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip">
+	    <TextView
+			android:layout_width="fill_parent"
+		  	android:layout_height="wrap_content"
+		  	android:text="@string/notify" 
+		  	android:textSize="20sp"  
+			android:textColor="#FFFFFF" />  	 		
+   	 	<CheckBox
+	    	android:id="@+id/notify_c_box"
+		    android:button = "@drawable/check_box_dark"
+	      	android:layout_width="wrap_content"
+	      	android:layout_height="wrap_content"
+	      	android:layout_marginLeft="20dp"
+	      	android:checked="false" />
+    </TableRow>
+    <TableRow
+        android:id="@+id/tableRow8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip" >
+   	    <Button
+	       android:id="@+id/create_button"
+	       android:textColor="#404040"
+	       android:layout_marginTop="6dp"
+	       android:layout_marginLeft="2dp"
+	       android:layout_marginRight="2dp"
+	       android:layout_marginBottom="4dp"
+	       android:layout_width="wrap_content"
+	       android:layout_height="30dp"
+	       android:text="@string/button_create"
+	       android:background = "@drawable/dual_button"
+	       android:onClick="createTask" />
+    </TableRow> 
+</TableLayout>

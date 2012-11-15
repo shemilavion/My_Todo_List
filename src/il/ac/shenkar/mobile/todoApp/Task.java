@@ -14,6 +14,13 @@ public class Task implements Comparable
 	private boolean				reminderFlag;
 	private Importancy			importancy;
 	private boolean				isDoneFlag;
+	//Default constructor
+	public Task()
+	{
+		super();
+		//initial task start date for current time
+		startDate = new GregorianCalendar();
+	}
 	//constructor
 	public Task(String taskName, String taskDescription, GregorianCalendar startDate,
 			GregorianCalendar dueDate, boolean reminderFlag, Importancy importancy,
@@ -26,6 +33,18 @@ public class Task implements Comparable
 		this.reminderFlag = reminderFlag;
 		this.importancy = importancy;
 		this.isDoneFlag = isDoneFlag;
+	}
+	//copy constructor
+	public Task(Task currTask) 
+	{
+		super();
+		this.taskName = currTask.taskName;
+		this.taskDescription = currTask.taskDescription;
+		this.startDate = currTask.startDate;
+		this.dueDate = currTask.dueDate;
+		this.reminderFlag = currTask.reminderFlag;
+		this.importancy = currTask.importancy;
+		this.isDoneFlag = currTask.isDoneFlag;
 	}
 	//getters & setters
 	public String getTaskName() 
@@ -80,7 +99,7 @@ public class Task implements Comparable
 	{
 		return isDoneFlag;
 	}
-	public void setIdDoneFlag(boolean isDoneFlag)
+	public void setIsDoneFlag(boolean isDoneFlag)
 	{
 		this.isDoneFlag = isDoneFlag;
 	}
@@ -88,14 +107,25 @@ public class Task implements Comparable
 	{
 		Task compTask = (Task)another;
 		int returnVal = 0;
-		if(compTask.importancy.ordinal() < this.importancy.ordinal() )
+		//order by importancy
+		//if(compTask.importancy.ordinal() < this.importancy.ordinal() )
+		//{
+		//	returnVal = -1;
+	//	}
+	//	else if(compTask.importancy.ordinal() > this.importancy.ordinal() )
+	//	{
+	//		returnVal = 1;
+	//	}
+		//order by insertion date
+		if(compTask.startDate.after(this.startDate) )
 		{
 			returnVal = -1;
 		}
-		else if(compTask.importancy.ordinal() > this.importancy.ordinal() )
+		else if(this.startDate.after(compTask.startDate) )
 		{
 			returnVal = 1;
 		}
+		//order by executed
 		if(this.isDoneFlag && (!compTask.isDoneFlag))
 		{
 			returnVal = 1;
@@ -109,5 +139,15 @@ public class Task implements Comparable
 			returnVal = 0;
 		}
 		return returnVal;
+	}
+	/**
+	 * if there is no task name or there is no due date or the due date precedes start date - don't validate the task*/
+	public boolean validateTask()
+	{
+		if(this.taskName.equals("") || this.dueDate == null || (this.startDate.after(this.dueDate)))
+		{
+			return false;
+		}
+		return true;
 	}
 }

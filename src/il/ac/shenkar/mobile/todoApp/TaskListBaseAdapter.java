@@ -1,9 +1,6 @@
 package il.ac.shenkar.mobile.todoApp;
 
-import java.util.ArrayList;
-
 import com.example.my_todo_app.R;
-
 import android.content.Context;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -15,24 +12,24 @@ import android.widget.TextView;
 
 public class TaskListBaseAdapter extends BaseAdapter
 {
-	private static ArrayList<Task> tasksDetailsrrayList;
+	private Dal taskDal = null;
 	private LayoutInflater l_Inflater;
 	
 	//constructor
-	public TaskListBaseAdapter(Context context, ArrayList<Task> results) 
+	public TaskListBaseAdapter(Context context) 
 	{
-		tasksDetailsrrayList = results;
+		taskDal =  Dal.getDal();	//call static method to get single tone dal object 
 		l_Inflater = LayoutInflater.from(context);
 	}
 	
 	public int getCount() 
 	{
-		return tasksDetailsrrayList.size();
+		return taskDal.GetSize();
 	}
 
 	public Object getItem(int position) 
 	{
-		return tasksDetailsrrayList.get(position);
+		return taskDal.GetTask(position);
 	}
 
 	public long getItemId(int position)
@@ -56,9 +53,9 @@ public class TaskListBaseAdapter extends BaseAdapter
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.txt_taskName.setText(tasksDetailsrrayList.get(position).getTaskName());
+		holder.txt_taskName.setText(taskDal.GetTask(position).getTaskName());
 		//make text strike-thru if task is done & check box checked
-		if(tasksDetailsrrayList.get(position).isDone())
+		if(taskDal.GetTask(position).isDone())
 		{
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG );
 		}
@@ -66,7 +63,9 @@ public class TaskListBaseAdapter extends BaseAdapter
 		{
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
 		}
-		holder.chk_isDone.setChecked(tasksDetailsrrayList.get(position).isDone());
+		//set the task nae as the checkbox tag - so we can interpret a checkbox pressure to task name
+		holder.chk_isDone.setTag(taskDal.GetTask(position).getTaskName());
+		holder.chk_isDone.setChecked(taskDal.GetTask(position).isDone());
 		return convertView;
 	}
 	
