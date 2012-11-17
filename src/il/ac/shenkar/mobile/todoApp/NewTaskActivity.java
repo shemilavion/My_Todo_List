@@ -22,10 +22,10 @@ import android.support.v4.app.NavUtils;
 @SuppressLint({ "NewApi", "NewApi", "NewApi" })
 public class NewTaskActivity extends Activity
 {
-	Dal taskDal = null;
-	int ID;
-	DialogFragment newFragment;
-	static final String fragmentTag = "datePicker";
+	private Dal taskDal = null;
+	private int ID;
+	private DialogFragment newFragment;
+	private static final String fragmentTag = "datePicker";
 	//date picker fragment
 	 FragmentManager FragmentManager;
     @Override
@@ -84,8 +84,17 @@ public class NewTaskActivity extends Activity
     	editText = (EditText) findViewById(R.id.new_task_description);
     	newTask.setTaskDescription(editText.getText().toString());
     	//get date from fragment
+    	FragmentManager = getFragmentManager();
         DatePickerFragment fragment = (DatePickerFragment) FragmentManager.findFragmentById(ID);
-        newTask.setDueDate( fragment.getDate());
+        if(fragment != null)
+        {
+        	newTask.setDueDate( fragment.getDate());
+        }
+        else
+        {
+    		Toast.makeText(getApplicationContext(), "pick a due date", Toast.LENGTH_LONG).show();
+    		return;        	
+        }
     	//get task priority
     	Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
     	newTask.setImportancy((Importancy)spinner.getSelectedItem());

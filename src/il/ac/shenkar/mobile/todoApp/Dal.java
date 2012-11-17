@@ -176,7 +176,7 @@ public class Dal implements TasksDal
     	taskDetails = new Task("fastem my seatbelt", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, true );
     	results.add(taskDetails);
-    	taskDetails = new Task("turn the tv on", "",
+    	taskDetails = new Task("turn on the tv", "",
     			new GregorianCalendar(2012,11,07,12,30), new GregorianCalendar(2012,11,10,12,30),true , Importancy.MEDIUM, false );
     	results.add(taskDetails);
     	taskDetails = new Task("close this app", "",
