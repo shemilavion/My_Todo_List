@@ -65,7 +65,7 @@ public final class R {
         public static final int button_back=0x7f040008;
         public static final int button_create=0x7f040009;
         public static final int button_done=0x7f040003;
-        public static final int button_set=0x7f040004;
+        public static final int button_sort=0x7f040004;
         public static final int dateRequest=0x7f040010;
         public static final int enter_task_date=0x7f04000f;
         public static final int enter_task_description=0x7f04000c;

@@ -36,7 +36,7 @@ public class NewTaskActivity extends Activity
         Spinner mySpinner = (Spinner) findViewById(R.id.priority_spinner);
         newFragment = new DatePickerFragment();
         mySpinner.setAdapter(new ArrayAdapter<Importancy>(this, android.R.layout.simple_spinner_item, Importancy.values()));
-        taskDal = Dal.getDal(); 
+        taskDal = Dal.getDal(this); 
     }
 
     @Override
@@ -100,7 +100,7 @@ public class NewTaskActivity extends Activity
     	newTask.setImportancy((Importancy)spinner.getSelectedItem());
     	//get notify flag
     	CheckBox checkBox = (CheckBox) findViewById(R.id.notify_c_box);
-    	newTask.setReminderFlag(checkBox.isChecked());
+    	newTask.setNotifyFlag(checkBox.isChecked());
 
     	if(! newTask.validateTask() )
     	{

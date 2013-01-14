@@ -14,22 +14,25 @@ public class TaskListBaseAdapter extends BaseAdapter
 {
 	private Dal taskDal = null;
 	private LayoutInflater l_Inflater;
+	Context cont;
 	
 	//constructor
 	public TaskListBaseAdapter(Context context) 
 	{
-		taskDal =  Dal.getDal();	//call static method to get single tone dal object 
+		cont = context;
+		taskDal =  Dal.getDal(cont);	//call static method to get single tone dal object 
 		l_Inflater = LayoutInflater.from(context);
 	}
 	
 	public int getCount() 
 	{
-		return taskDal.GetSize();
+		return taskDal.getTasksCount();
 	}
 
 	public Object getItem(int position) 
 	{
-		return taskDal.GetTask(position);
+		
+		return taskDal.getTask(position);
 	}
 
 	public long getItemId(int position)
@@ -53,9 +56,9 @@ public class TaskListBaseAdapter extends BaseAdapter
 		{
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.txt_taskName.setText(taskDal.GetTask(position).getTaskName());
+		holder.txt_taskName.setText(taskDal.getTask(position).getTaskName());
 		//make text strike-thru if task is done & check box checked
-		if(taskDal.GetTask(position).isDone())
+		if(taskDal.getTask(position).isDone())
 		{
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG );
 		}
@@ -63,9 +66,9 @@ public class TaskListBaseAdapter extends BaseAdapter
 		{
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
 		}
-		//set the task nae as the checkbox tag - so we can interpret a checkbox pressure to task name
-		holder.chk_isDone.setTag(taskDal.GetTask(position).getTaskName());
-		holder.chk_isDone.setChecked(taskDal.GetTask(position).isDone());
+		//set the task id as the checkbox tag - so we can interpret a checkbox pressure to task id
+		holder.chk_isDone.setTag(taskDal.getTask(position).getTaskId());
+		holder.chk_isDone.setChecked(taskDal.getTask(position).isDone());
 		return convertView;
 	}
 	

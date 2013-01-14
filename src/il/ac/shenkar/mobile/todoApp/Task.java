@@ -7,13 +7,17 @@ public class Task implements Comparable
 {
 
 	//define task fields
+	private	int					taskId;
 	private String 				taskName;
 	private String 				taskDescription;
 	private GregorianCalendar	startDate;
 	private GregorianCalendar	dueDate;
-	private boolean				reminderFlag;
+	private boolean				notifyFlag;
 	private Importancy			importancy;
-	private boolean				isDoneFlag;
+	//task lat & long initialed to -1 if not inserted
+	private double 				taskLat = -1;	
+	private double				taskLong = -1;
+	private boolean				isDoneFlag = false;
 	//Default constructor
 	public Task()
 	{
@@ -22,17 +26,21 @@ public class Task implements Comparable
 		startDate = new GregorianCalendar();
 	}
 	//constructor
-	public Task(String taskName, String taskDescription, GregorianCalendar startDate,
-			GregorianCalendar dueDate, boolean reminderFlag, Importancy importancy,
-			boolean isDoneFlag) {
+	public Task(int id,String taskName, String taskDescription, GregorianCalendar startDate,
+			GregorianCalendar dueDate, boolean notifyFlag, Importancy importancy,
+			double lat, double lon, boolean isDoneFlag) 
+	{
 		super();
-		this.taskName = taskName;
-		this.taskDescription = taskDescription;
-		this.startDate = startDate;
-		this.dueDate = dueDate;
-		this.reminderFlag = reminderFlag;
-		this.importancy = importancy;
-		this.isDoneFlag = isDoneFlag;
+		this.taskId 			= 	id;
+		this.taskName 			=	taskName;
+		this.taskDescription	= 	taskDescription;
+		this.startDate 			= 	startDate;
+		this.dueDate 			= 	dueDate;
+		this.notifyFlag 		= 	notifyFlag;
+		this.importancy 		= 	importancy;
+		this.taskLat			=	lat;
+		this.taskLong			=	lon;
+		this.isDoneFlag 		= 	isDoneFlag;
 	}
 	//copy constructor
 	public Task(Task currTask) 
@@ -42,11 +50,19 @@ public class Task implements Comparable
 		this.taskDescription = currTask.taskDescription;
 		this.startDate = currTask.startDate;
 		this.dueDate = currTask.dueDate;
-		this.reminderFlag = currTask.reminderFlag;
+		this.notifyFlag = currTask.notifyFlag;
 		this.importancy = currTask.importancy;
 		this.isDoneFlag = currTask.isDoneFlag;
 	}
 	//getters & setters
+	public int getTaskId() 
+	{
+		return taskId;
+	}
+	public void setTaskId(int taskId)
+	{
+		this.taskId = taskId;
+	}
 	public String getTaskName() 
 	{
 		return taskName;
@@ -79,13 +95,13 @@ public class Task implements Comparable
 	{
 		this.dueDate = dueDate;
 	}
-	public boolean isReminderFlag()
+	public boolean getNotifyFlag()
 	{
-		return reminderFlag;
+		return notifyFlag;
 	}
-	public void setReminderFlag(boolean reminderFlag)
+	public void setNotifyFlag(boolean notifyFlag)
 	{
-		this.reminderFlag = reminderFlag;
+		this.notifyFlag = notifyFlag;
 	}
 	public Importancy getImportancy() 
 	{
@@ -98,6 +114,22 @@ public class Task implements Comparable
 	public boolean isDone()
 	{
 		return isDoneFlag;
+	}
+	public double getTaskLat() 
+	{
+		return taskLat;
+	}
+	public void setTaskLat(double taskLat) 
+	{
+		this.taskLat = taskLat;
+	}
+	public double getTaskLong() 
+	{
+		return taskLong;
+	}
+	public void setTaskLong(double taskLong) 
+	{
+		this.taskLong = taskLong;
 	}
 	public void setIsDoneFlag(boolean isDoneFlag)
 	{

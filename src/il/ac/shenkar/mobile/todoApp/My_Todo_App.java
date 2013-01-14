@@ -22,7 +22,7 @@ public class My_Todo_App extends Activity
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        taskDal = Dal.getDal();
+        taskDal = Dal.getDal(this);
         setContentView(R.layout.activity_my__todo__app);
         final ListView tasksListView = (ListView) findViewById(R.id.listV_main);
         //set the listView adapter
@@ -63,8 +63,8 @@ public class My_Todo_App extends Activity
 	
 	public void onCheckedChanged(View v) 
 	{
-		String taskName = (String)v.getTag();
-		Task currTask = taskDal.GetTask(taskName);
+		int taskId = (Integer)v.getTag();
+		Task currTask = taskDal.getTaskById(taskId);
 		currTask.setIsDoneFlag(!currTask.isDone());
 		taskDal.deleteTask(currTask);
 		taskDal.addTask(currTask);
