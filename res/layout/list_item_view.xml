@@ -6,24 +6,35 @@
     android:paddingLeft="5dip"
     android:paddingRight="5dip"
     android:paddingTop="8dip"
-    android:paddingBottom="8dip" >
+    android:paddingBottom="8dip">
 
 	<TextView 
 	    android:id="@+id/Task_name"
 		android:textSize="20sp" 
 		android:textStyle="bold" 
 		android:textColor="#FFFFFF" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"/>
-	 <CheckBox
+		android:layout_centerVertical="true"
+		android:layout_alignParentLeft = "true"	
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		android:longClickable="true"
+		android:onClick = "onTaskPicked" />
+	<Button
+        android:id="@+id/delete_button"
+      	android:layout_centerVertical="true"
+      	android:layout_alignParentRight = "true"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="50sp"
+        android:background = "@drawable/dual_delete"
+        android:onClick="deleteTask" /> 
+	<CheckBox
 	    android:id="@+id/done_flag"
-	    android:button = "@drawable/check_box"
+	    android:button ="@drawable/check_box"
+		android:layout_alignParentRight = "true"	    
+      	android:layout_centerVertical="true"
       	android:layout_width="wrap_content"
       	android:layout_height="wrap_content"
       	android:checked="false"
-      	android:layout_alignParentRight="true"
-      	android:layout_centerVertical="true"
-      	android:onClick = "onCheckedChanged" /> 
-      	
+      	android:onClick = "onCheckedChanged" />
 </RelativeLayout>

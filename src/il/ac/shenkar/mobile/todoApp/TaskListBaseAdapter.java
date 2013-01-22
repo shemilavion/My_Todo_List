@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class TaskListBaseAdapter extends BaseAdapter
 			holder = new ViewHolder();
 			holder.txt_taskName = (TextView) convertView.findViewById(R.id.Task_name);
 			holder.chk_isDone = (CheckBox) convertView.findViewById(R.id.done_flag);
+			holder.del_button = (Button) convertView.findViewById(R.id.delete_button);
 			convertView.setTag(holder);
 		}
 		else 
@@ -67,8 +69,13 @@ public class TaskListBaseAdapter extends BaseAdapter
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
 		}
 		//set the task id as the checkbox tag - so we can interpret a checkbox pressure to task id
-		holder.chk_isDone.setTag(taskDal.getTask(position).getTaskId());
+		int taskId = taskDal.getTask(position).getTaskId();
+		holder.chk_isDone.setTag(taskId);
 		holder.chk_isDone.setChecked(taskDal.getTask(position).isDone());
+		//set the task id as the textfield tag - so we can interpret the pressure
+		holder.txt_taskName.setTag(taskId);
+		//set the task id as the delete button tag so we can determine which task to delete
+		holder.del_button.setTag(taskId);
 		return convertView;
 	}
 	
@@ -76,6 +83,7 @@ public class TaskListBaseAdapter extends BaseAdapter
 	{
 		TextView txt_taskName;
 		CheckBox chk_isDone;
+		Button	 del_button;
 	}
 	
 }

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/list_background">
+	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	 	android:id="@+id/tableLayout2"
+   	 	android:layout_marginTop="100dp"
+   	 	android:layout_marginLeft="40dp"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent">
+    	<TableRow
+        	android:id="@+id/taskRow1"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingRight="5dip"
+        	android:paddingLeft="5dip"
+        	android:paddingTop="5dip"
+        	android:paddingBottom="7dip">
+			<TextView
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:text="@string/task_name" 
+		  		android:textSize="12sp"
+		  		android:textStyle="bold"  
+				android:textColor="#000000" />
+			<TextView
+			    android:id="@+id/pop_task_name"
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content" 
+		  		android:textSize="12sp" 
+				android:textColor="#000000" />
+    	 </TableRow>
+    	    <TableRow
+        	android:id="@+id/taskRow2"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingRight="5dip"
+        	android:paddingLeft="5dip"
+        	android:paddingTop="5dip"
+        	android:paddingBottom="7dip">
+			<TextView
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:text="@string/task_details" 
+		  		android:textSize="12sp"
+		  		android:textStyle="bold"  
+				android:textColor="#000000" />
+			<TextView
+			    android:id="@+id/pop_task_desc"
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content" 
+		  		android:textSize="12sp" 
+				android:textColor="#000000" />
+    	</TableRow>
+    	<TableRow
+        	android:id="@+id/taskRow3"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingRight="5dip"
+        	android:paddingLeft="5dip"
+        	android:paddingTop="5dip"
+        	android:paddingBottom="7dip">
+			<TextView
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:text="@string/start_date" 
+		  		android:textSize="12sp"
+		  		android:textStyle="bold"  
+				android:textColor="#000000" />
+				<TextView
+			    android:id="@+id/pop_start"
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content" 
+		  		android:textSize="12sp" 
+				android:textColor="#000000" />
+    	</TableRow>
+    	<TableRow
+        	android:id="@+id/taskRow4"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingRight="5dip"
+        	android:paddingLeft="5dip"
+        	android:paddingTop="5dip"
+        	android:paddingBottom="7dip">
+			<TextView
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:text="@string/due_date" 
+		  		android:textSize="12sp"
+		  		android:textStyle="bold"  
+				android:textColor="#000000" />
+				<TextView
+			    android:id="@+id/pop_end"
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content" 
+		  		android:textSize="12sp" 
+				android:textColor="#000000" />
+		</TableRow>
+    	<TableRow
+        	android:id="@+id/taskRow5"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingRight="5dip"
+        	android:paddingLeft="5dip"
+        	android:paddingTop="5dip"
+        	android:paddingBottom="7dip">
+			<TextView
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:text="@string/task_priority" 
+		  		android:textSize="12sp"
+		  		android:textStyle="bold"  
+				android:textColor="#000000" />
+			<TextView
+			    android:id="@+id/pop_priority"
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content" 
+		  		android:textSize="12sp" 
+				android:textColor="#000000" />
+    	</TableRow>
+    	<TableRow
+        	android:id="@+id/taskRow6"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:paddingRight="5dip"
+        	android:paddingLeft="5dip"
+        	android:paddingTop="5dip"
+        	android:paddingBottom="7dip">
+			<TextView
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content"
+		  		android:text="@string/notify_flag" 
+		  		android:textSize="12sp"
+		  		android:textStyle="bold"  
+				android:textColor="#000000" />
+			<TextView
+			    android:id="@+id/pop_notify"
+				android:layout_width="fill_parent"
+		  		android:layout_height="wrap_content" 
+		  		android:textSize="12sp" 
+				android:textColor="#000000" />
+    	</TableRow>
+     </TableLayout>
+     <LinearLayout 
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" 
+      android:layout_marginBottom="0dp"
+      android:layout_marginLeft="50dp"
+      >
+      <Button
+          android:id="@+id/popup_done"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/pop_done" />
+      <Button
+          android:id="@+id/edit_task"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/edit_task" />
+       <Button
+          android:id="@+id/delete_task"
+          android:layout_width="fill_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/del_task" />
+      </LinearLayout>
+</LinearLayout>

@@ -12,10 +12,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.DatePicker;
 
-@SuppressLint("NewApi")
+@SuppressLint({ "NewApi", "SimpleDateFormat" })
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener 
 {
-	GregorianCalendar cal;
+	GregorianCalendar cal = null;
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
@@ -33,11 +33,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 		Button date = (Button) getActivity().findViewById(R.id.new_task_date);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
 		cal = new GregorianCalendar( year, month, day );
-		date.setText(sdf.format(cal.getTime()));
-		
+		date.setText(sdf.format(cal.getTime()));		
 	}
-
-
 	// get the current selected date 
 	public GregorianCalendar getDate()
 	{

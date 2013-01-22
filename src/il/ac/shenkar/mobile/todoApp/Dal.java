@@ -17,6 +17,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * */
 public class Dal extends SQLiteOpenHelper implements TasksDal 
 {
+	Context mainListActivityContext;
 	//Static variables
     ArrayList<Task> tasksList = null;
 	// Database Version
@@ -53,6 +54,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	private Dal(Context context)
 	{
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		mainListActivityContext = context;
 		syncDal();
 	}
 	//single tone object getter
@@ -149,8 +151,8 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         return tasksList.size();
 	}
 	
-	//add task to db
-	public boolean addTask(Task newTask) 
+	//add task to db & return the task id
+	public long addTask(Task newTask) 
     {
     	//get the database object
         SQLiteDatabase db = this.getWritableDatabase();
@@ -176,11 +178,12 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         values.put(KEY_LON, newTask.getTaskLong()); 								// Contact Name
         values.put(KEY_DONE, newTask.isDone()); 									// Contact Name
         // Insert the Row
-        db.insert(TABLE_TASKS, null, values);
+        long id = db.insert(TABLE_TASKS, null, values);
         db.close(); // Closing database connection
         //after task added to db - update tasks list
         syncDal();
-		return true;
+        
+		return id;
 	}
     
     //delete single task from db
@@ -208,6 +211,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 		}
 		Collections.sort(tmpTasksList);
 		tasksList = tmpTasksList;
+		((My_Todo_App)mainListActivityContext).onResume();
 	}
 	
 	

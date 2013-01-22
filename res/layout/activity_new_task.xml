@@ -3,6 +3,7 @@
     android:id="@+id/tableLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:screenOrientation="portrait"
     android:background="@drawable/add_task_bg" >
  
     <TableRow
@@ -11,8 +12,8 @@
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip">
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
 		<TextView
 			android:layout_width="fill_parent"
 		  	android:layout_height="wrap_content"
@@ -27,8 +28,8 @@
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip">
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
  
        <EditText android:id="@+id/new_task_name"
 			android:layout_weight = "1"
@@ -49,8 +50,8 @@
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip">
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
         <EditText android:id="@+id/new_task_description"
 			android:layout_weight = "1"
 			android:layout_marginTop="6dp"
@@ -70,8 +71,8 @@
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip">
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
         <Button
            android:layout_weight = "1"
 	       android:id="@+id/new_task_date"
@@ -86,16 +87,38 @@
 	       android:background = "@drawable/dual_button"
 	       android:text="@string/dateRequest"
 	       android:onClick="pickDate" />
-
     </TableRow>
-    <TableRow
+        <TableRow
         android:id="@+id/tableRow5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip">
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
+        <Button
+           android:layout_weight = "1"
+	       android:id="@+id/new_task_time"
+	       android:textColor="#404040"
+	       android:layout_marginTop="6dp"
+	       android:layout_marginLeft="2dp"
+	       android:layout_marginRight="2dp"
+	       android:layout_marginBottom="4dp"
+	       android:layout_width="0dp"
+	       android:layout_height="wrap_content"
+	       android:textSize="20sp"  
+	       android:background = "@drawable/dual_button"
+	       android:text="@string/timeRequest"
+	       android:onClick="pickTime" />
+    </TableRow>
+    <TableRow
+        android:id="@+id/tableRow6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dip"
+        android:paddingLeft="5dip"
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
         <TextView
 			android:layout_width="fill_parent"
 		  	android:layout_height="wrap_content"
@@ -111,13 +134,13 @@
     </TableRow>    
 
     <TableRow
-        android:id="@+id/tableRow6"
+        android:id="@+id/tableRow7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip">
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip">
 	    <TextView
 			android:layout_width="fill_parent"
 		  	android:layout_height="wrap_content"
@@ -138,8 +161,8 @@
         android:layout_height="wrap_content"
         android:paddingRight="5dip"
         android:paddingLeft="5dip"
-        android:paddingTop="10dip"
-        android:paddingBottom="10dip" >
+        android:paddingTop="7dip"
+        android:paddingBottom="7dip" >
    	    <Button
 	       android:id="@+id/create_button"
 	       android:textColor="#404040"
