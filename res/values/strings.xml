@@ -9,6 +9,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_new_task">New Task</string>
 	<string name="button_back">Back</string>
+	<string name="button_random">Random Fill</string>
 	<string name="button_create">Create Task</string>
 	<string name="enter_task_details">Insert Task Details</string>
 	<string name="enter_task_name">Enter Task Name</string>
@@ -27,4 +28,15 @@
 	<string name="pop_done">Done</string>
 	<string name="edit_task">Edit</string>
 	<string name="del_task">Delete</string>
+	<string name="task_status">Task Status</string>
+	<string name="save_changes">Save changes</string>
+	<string name="notifying_message">Notifing uppon due date</string>
+	<string name="not_notifying_message">Not Notifing on due date</string>	
+	<string name="urlString">http://mobile1-tasks-dispatcher.herokuapp.com/task/random</string>
+	<string name="random_con_err">cannot establish connection to server</string>
+	<string name="task_due_calendar">Due date and time:</string>
+	<string name="downloading">Downloading Task From Web Server...</string>
+	<string name="net_err_head">Internet Connection Error</string>
+	<string name="net_err_msg">Please connect the internet and Try again</string>  	
+	
 </resources>

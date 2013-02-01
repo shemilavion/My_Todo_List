@@ -1,19 +1,25 @@
 package il.ac.shenkar.mobile.todoApp;
 
 
-
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import com.example.my_todo_app.R;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,13 +27,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
-@SuppressLint({ "NewApi", "NewApi", "NewApi" })
+@SuppressLint({ "NewApi", "NewApi", "NewApi", "SimpleDateFormat" })
 public class NewTaskActivity extends Activity
 {
 	private Dal taskDal = null;
@@ -35,8 +42,8 @@ public class NewTaskActivity extends Activity
 	private DialogFragment timeFragment;
 	private static final String dateFragmentTag = "datePicker";
 	private static final String timeFragmentTag = "timePicker";
-	private NotificationManager notificationManager;
-	private Notification myNotification;
+	int editedId = -1;
+	private ProgressDialog progressDialod;
 	//5 MINUTS IN MILL's
 	private int PRE_NOTIFY_TIME_IN_MILLES = 300000;
 	//date picker fragment
@@ -44,6 +51,7 @@ public class NewTaskActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+    	editedId = -1;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
         Spinner mySpinner = (Spinner) findViewById(R.id.priority_spinner);
@@ -51,9 +59,32 @@ public class NewTaskActivity extends Activity
         timeFragment = new TimePickerFragment();
         mySpinner.setAdapter(new ArrayAdapter<Importancy>(this, android.R.layout.simple_spinner_item, Importancy.values()));
         taskDal = Dal.getDal(this); 
+    	Intent incomeIntent = this.getIntent();
+        int taskToEditId = incomeIntent.getIntExtra("edit_task_id", -1);
+        if(taskToEditId != -1)
+        {
+        	editedId = taskToEditId;
+        	((Button)findViewById(R.id.create_button)).setText(getString (R.string.save_changes));
+        	//call method to display task data
+        	this.fillTaskForm(taskDal.getTaskById(taskToEditId));
+        }
     }
 
     @Override
+	protected void onResume() 
+    {
+		super.onResume();
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTimeInMillis(System.currentTimeMillis() + 1800000);
+		//set due date field
+ 		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
+ 		((Button)findViewById(R.id.new_task_date)).setText(sdf.format(cal.getTime()));
+ 		//set due time field
+ 		sdf = new SimpleDateFormat("hh:mm");
+ 		((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
+	}
+
+	@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
         getMenuInflater().inflate(R.menu.activity_new_task, menu);
@@ -88,10 +119,63 @@ public class NewTaskActivity extends Activity
         //create & show the time picker
     	timeFragment.show(FragmentManager, timeFragmentTag);
     }
-    
-    @SuppressWarnings("deprecation")
-	public void createTask(View view)
+    public void getRandomTask(View v)
     {
+    	//create url
+ 		URL tasksServerUrl = null;
+ 		//check network state
+ 		// first we will check if we got internet connection
+    	ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE); 
+    	NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+    	
+    	// if we have no internet connection
+    	if (activeNetwork == null)
+    	{
+    		// i need to display error massage to the user
+    		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    		// set title
+    		alertDialogBuilder.setTitle(getString(R.string.net_err_head));  
+    		// set dialog message
+    		alertDialogBuilder.setMessage(getString(R.string.net_err_msg))
+    						  .setCancelable(false)
+    						  .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+    							public void onClick(DialogInterface dialog,int id) {
+    								// if this button is clicked, close the dilaog
+    								dialog.cancel();
+    								return;
+    							}
+    						  });
+    		// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+			// show it
+			alertDialog.show();
+    	}
+    	else			// start to fetch the Task
+    	{
+    		
+    		//starting the spinner
+    		myProgressDialogStart(getString(R.string.downloading));
+			try 
+			{
+				tasksServerUrl = new URL(getString(R.string.urlString));
+			}
+			catch (MalformedURLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	 		//create the async task
+			
+	 		new AsyncTaskWebServer(this).execute(tasksServerUrl);
+    	}		
+    }
+    public void createTask(View view)
+    {
+    	//case of editing mode - delete old task first
+    	if(editedId != -1)
+    	{
+    		taskDal.deleteTask(taskDal.getTaskById(editedId));
+    	}
     	Task newTask = new Task();
     	//get task name from gui
     	EditText editText = (EditText) findViewById(R.id.new_task_name);
@@ -100,30 +184,13 @@ public class NewTaskActivity extends Activity
     	editText = (EditText) findViewById(R.id.new_task_description);
     	newTask.setTaskDescription(editText.getText().toString());
     	//get date from fragment
-        if(((DatePickerFragment)dateFragment).getDate() != null)
-        {
-        	newTask.setDueDate( ((DatePickerFragment)dateFragment).getDate());
-        }
-        else
-        {
-    		Toast.makeText(getApplicationContext(), "pick a due date", Toast.LENGTH_LONG).show();
-    		return;        	
-        }
-        //get time from fragment
-        if(((TimePickerFragment)timeFragment).getTime() != null)
-        {
-        	GregorianCalendar selectedTime = ((TimePickerFragment)timeFragment).getTime();
-        	GregorianCalendar selectedDate = newTask.getDueDate();
-        	selectedDate.set(Calendar.HOUR,selectedTime.get(Calendar.HOUR));
-        	selectedDate.set(Calendar.MINUTE,selectedTime.get(Calendar.MINUTE));
-        	selectedDate.set(Calendar.AM_PM,selectedTime.get(Calendar.AM_PM));
-        	newTask.setDueDate(selectedDate);
-        }
-        else
-        {
-    		Toast.makeText(getApplicationContext(), "pick a due date", Toast.LENGTH_LONG).show();
-    		return;        	
-        }
+    	newTask.setDueDate( ((DatePickerFragment)dateFragment).getDate());
+    	GregorianCalendar selectedTime = ((TimePickerFragment)timeFragment).getTime();
+    	GregorianCalendar selectedDate = newTask.getDueDate();
+    	selectedDate.set(Calendar.HOUR,selectedTime.get(Calendar.HOUR));
+    	selectedDate.set(Calendar.MINUTE,selectedTime.get(Calendar.MINUTE));
+    	selectedDate.set(Calendar.AM_PM,selectedTime.get(Calendar.AM_PM));
+    	newTask.setDueDate(selectedDate);
     	//get task priority
     	Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
     	newTask.setImportancy((Importancy)spinner.getSelectedItem());
@@ -138,31 +205,24 @@ public class NewTaskActivity extends Activity
     	}
     	//insert new task into db
     	long newTaskId = taskDal.addTask(newTask);
-    	
+   	
     	//set a notification if needed
     	if(newTask.getNotifyFlag())
     	{
-	    		notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 	    	//////////////////////////////////////////////////////////////////////////////////////////////
 	    	//	for time debugging																		//
 	    	//	System.out.println(newTask.getDueDate().toString());									//
 	    	//	System.out.println("local time:" + new GregorianCalendar().getTimeInMillis());			//
 	    	//	System.out.println("notification time:" + newTask.getDueDate().getTimeInMillis());		//
 	    	//////////////////////////////////////////////////////////////////////////////////////////////
-	    		//create the notification
-			Context context = getApplicationContext();
-			myNotification = new Notification(R.drawable.ic_launcher,newTask.getTaskName()//,50);
-					,newTask.getDueDate().getTimeInMillis() - PRE_NOTIFY_TIME_IN_MILLES);
-			//initial notification name & description
-			String notificationTitle = newTask.getTaskName();
-			String notificationText = newTask.getTaskDescription();
-			Intent myIntent = new Intent("il.ac.shenkar.mobile.todoApp.My_Todo_App");
-			myIntent.putExtra("il.ac.shenkar.mobile.todoApp.taskId", (int)newTaskId);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context,0,myIntent,PendingIntent.FLAG_CANCEL_CURRENT);
-			myNotification.defaults |= Notification.DEFAULT_SOUND;
-			myNotification.flags |= Notification.FLAG_AUTO_CANCEL;
-			myNotification.setLatestEventInfo(context, notificationTitle, notificationText, pendingIntent);
-		    notificationManager.notify(0, myNotification);
+    		Context context = getApplicationContext();
+	    	Intent activityIntent = new Intent(context ,Notifyer.class);
+	    	activityIntent.putExtra("notified_taskId", (int)newTaskId);
+	    	PendingIntent penIntent =  PendingIntent.getBroadcast(this, (int)newTaskId,activityIntent,PendingIntent.FLAG_ONE_SHOT);
+	    	AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+	    	alarmManager.set(AlarmManager.RTC_WAKEUP
+	    	,newTask.getDueDate().getTimeInMillis() - PRE_NOTIFY_TIME_IN_MILLES
+	    	,penIntent);
     	}
     	finish();
     }
@@ -190,4 +250,50 @@ public class NewTaskActivity extends Activity
  	    }
  	    return ret;
  	}
+ 	
+ 	//this method receives a task & fill all new task activity fields according to the task details.  
+ 	@SuppressLint("SimpleDateFormat")
+	public void fillTaskForm(Task inputTask)
+ 	{
+ 		//nullness check
+ 		if(inputTask == null)
+ 		{
+ 			return;
+ 		}
+ 		//set task name field
+ 		((EditText)findViewById(R.id.new_task_name)).setText(inputTask.getTaskName());
+ 		//set task description field
+ 		((EditText)findViewById(R.id.new_task_description)).setText(inputTask.getTaskDescription());
+ 		//set due date field
+ 		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
+ 		GregorianCalendar cal = inputTask.getDueDate();
+ 		((Button)findViewById(R.id.new_task_date)).setText(sdf.format(cal.getTime()));
+ 		//set due time field
+ 		sdf = new SimpleDateFormat("hh:mm");
+ 		((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
+ 		//set task priority
+ 		((Spinner)findViewById(R.id.priority_spinner)).setSelection(inputTask.getImportancy().getValue());
+ 		//set notify check box
+ 		((CheckBox)findViewById(R.id.notify_c_box)).setChecked(inputTask.getNotifyFlag());
+ 	}
+
+ 	  // creating the progress dialog
+    public void myProgressDialogStart(String msg)
+     {
+     	//building the progress dialog
+         this.progressDialod = new ProgressDialog(this);
+         progressDialod.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+         progressDialod.setMessage(msg);
+         progressDialod.setIndeterminate(true);
+         progressDialod.setCancelable(false);
+ 		progressDialod.show();
+     }
+    
+    //canceling the progress dialog
+    public void myProgressDialogStop() 
+    {
+    	this.progressDialod.cancel();
+    }
+ 	
 }
+

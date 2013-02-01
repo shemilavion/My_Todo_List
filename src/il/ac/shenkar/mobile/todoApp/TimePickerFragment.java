@@ -1,5 +1,6 @@
 package il.ac.shenkar.mobile.todoApp;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import com.example.my_todo_app.R;
@@ -14,7 +15,12 @@ import android.widget.TimePicker;
 @SuppressLint({ "NewApi", "SimpleDateFormat" })
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener 
 {
-	GregorianCalendar cal = null;
+	GregorianCalendar cal = new GregorianCalendar();
+	//constructor
+	public TimePickerFragment()
+	{
+		cal.setTimeInMillis(System.currentTimeMillis()+1800000);
+	}
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
@@ -31,11 +37,11 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	{
 		Button time = (Button) getActivity().findViewById(R.id.new_task_time);
 		//create calendar object & update the  hour & minute values
-		cal = new GregorianCalendar();
 		cal.set(Calendar.HOUR, hour);
 		cal.set(Calendar.MINUTE, minute);
-		cal.set(Calendar.SECOND, 0);
-		time.setText(String.valueOf(hour) + " : "+String.valueOf(minute));
+		cal.set(Calendar.SECOND, 0);		
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+		time.setText(sdf.format(cal.getTime()));
 	}
 	// get the current selected time 
 	public GregorianCalendar getTime()

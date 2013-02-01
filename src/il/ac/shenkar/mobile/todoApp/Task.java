@@ -8,6 +8,7 @@ public class Task implements Comparable
 
 	//define task fields
 	private	int					taskId;
+	private String				serverId = "";
 	private String 				taskName;
 	private String 				taskDescription;
 	private GregorianCalendar	startDate;
@@ -23,15 +24,21 @@ public class Task implements Comparable
 	{
 		super();
 		//initial task start date for current time
-		startDate = new GregorianCalendar();
+		startDate 			= new GregorianCalendar();
+		dueDate 			=  new GregorianCalendar();
+		//set due date to half an hour from now
+		dueDate.setTimeInMillis(dueDate.getTimeInMillis() + 1800000);
+		importancy 			= Importancy.NONE;
+		notifyFlag 			= false;
 	}
 	//constructor
-	public Task(int id,String taskName, String taskDescription, GregorianCalendar startDate,
+	public Task(int id,String serverId, String taskName, String taskDescription, GregorianCalendar startDate,
 			GregorianCalendar dueDate, boolean notifyFlag, Importancy importancy,
 			double lat, double lon, boolean isDoneFlag) 
 	{
 		super();
 		this.taskId 			= 	id;
+		this.serverId			= 	serverId;
 		this.taskName 			=	taskName;
 		this.taskDescription	= 	taskDescription;
 		this.startDate 			= 	startDate;
@@ -66,6 +73,15 @@ public class Task implements Comparable
 	public String getTaskName() 
 	{
 		return taskName;
+	}
+	
+	public String getServerId() 
+	{
+		return serverId;
+	}
+	public void setServerId(String serverId)
+	{
+		this.serverId = serverId;
 	}
 	public void setTaskName(String taskName) 
 	{

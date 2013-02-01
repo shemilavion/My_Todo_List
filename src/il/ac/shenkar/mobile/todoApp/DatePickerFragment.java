@@ -15,7 +15,12 @@ import android.widget.DatePicker;
 @SuppressLint({ "NewApi", "SimpleDateFormat" })
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener 
 {
-	GregorianCalendar cal = null;
+	GregorianCalendar cal = new GregorianCalendar();
+	//constructor
+	public DatePickerFragment()
+	{
+		cal.setTimeInMillis(System.currentTimeMillis()+1800000);
+	}
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{

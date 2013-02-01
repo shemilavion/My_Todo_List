@@ -30,7 +30,8 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
     private static final String TABLE_TASKS = "tasks";
  
     // Contacts Table Columns names
-    private static final String KEY_ID 		= 	"id"; 
+    private static final String KEY_ID 		= 	"id";
+    private static final String KEY_SERVER_ID= 	"server_id";
     private static final String KEY_NAME 	= 	"name";
     private static final String KEY_DESC 	= 	"description";
     private static final String KEY_ST_YR   = 	"start_year";
@@ -72,6 +73,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
     {
         String CREATE_TASKS_TABLE = "CREATE TABLE " + TABLE_TASKS + "("
         		+ KEY_ID   	     + " INTEGER PRIMARY KEY AUTOINCREMENT,"	//the id of each task must be unique - so its defined as AUTOINCREMENT
+        		+KEY_SERVER_ID	 + " TEXT,"
         		+ KEY_NAME   	 + " TEXT," 
         		+ KEY_DESC   	 + " TEXT,"
         		+ KEY_ST_YR    	 + " INTEGER,"
@@ -138,6 +140,20 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 		}
 		return null;
 	}
+	//get the task by server id
+	public Task getTaskByServerId(String serverId)
+	{
+		for ( Iterator<Task> iterator= tasksList.iterator(); iterator.hasNext(); ) 
+		{
+			Task currTask = (Task) iterator.next();
+			if( currTask.getServerId().equals(serverId) )
+			{
+				//once a match found - return to caller
+				return currTask;
+			}
+		}
+		return null;
+	}
 	//number of tasks in database getter
 	public int getTasksCount()
 	{
@@ -160,6 +176,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         ContentValues values = new ContentValues();
         //Build the row
         //values.put(KEY_ID, newTask.getTaskId());	//task id - mark as remark because the id is auto generated 
+        values.put(KEY_SERVER_ID, newTask.getServerId()); 							// task Server id
         values.put(KEY_NAME, newTask.getTaskName()); 								// task Name
         values.put(KEY_DESC, newTask.getTaskDescription()); 						// task description
         values.put(KEY_ST_YR, newTask.getStartDate().get(Calendar.YEAR)); 			// task start year
@@ -167,11 +184,11 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         values.put(KEY_ST_DAY, newTask.getStartDate().get(Calendar.DAY_OF_MONTH));	// task start day
         values.put(KEY_ST_HOUR, newTask.getStartDate().get(Calendar.HOUR)); 		// task start hour
         values.put(KEY_ST_MIN, newTask.getStartDate().get(Calendar.MINUTE));		// task start minutes
-        values.put(KEY_DUE_YR, newTask.getStartDate().get(Calendar.YEAR));			// task end year
-        values.put(KEY_DUE_MON, newTask.getStartDate().get(Calendar.MONTH));		// task end year
-        values.put(KEY_DUE_DAY, newTask.getStartDate().get(Calendar.DAY_OF_MONTH));	// task end year
-        values.put(KEY_DUE_HOUR, newTask.getStartDate().get(Calendar.HOUR));		// task end year
-        values.put(KEY_DUE_MIN, newTask.getStartDate().get(Calendar.MINUTE));		// task end year
+        values.put(KEY_DUE_YR, newTask.getDueDate().get(Calendar.YEAR));			// task end year
+        values.put(KEY_DUE_MON, newTask.getDueDate().get(Calendar.MONTH));			// task end year
+        values.put(KEY_DUE_DAY, newTask.getDueDate().get(Calendar.DAY_OF_MONTH));	// task end year
+        values.put(KEY_DUE_HOUR, newTask.getDueDate().get(Calendar.HOUR));			// task end year
+        values.put(KEY_DUE_MIN, newTask.getDueDate().get(Calendar.MINUTE));			// task end year
         values.put(KEY_NOT, newTask.getNotifyFlag()); 								// Contact Name
         values.put(KEY_IMP, newTask.getImportancy().toString()); 					// Contact Name
         values.put(KEY_LAT, newTask.getTaskLat());									// Contact Name
@@ -182,7 +199,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         db.close(); // Closing database connection
         //after task added to db - update tasks list
         syncDal();
-        
+        ((My_Todo_App)mainListActivityContext).onResume();
 		return id;
 	}
     
@@ -242,29 +259,30 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	private Task parseTaskFromRow(Cursor cursor)
 	{
 		 //create start calendar object
-	    GregorianCalendar start = new GregorianCalendar(Integer.parseInt(cursor.getString(3)),
-	    		Integer.parseInt(cursor.getString(4)),
+	    GregorianCalendar start = new GregorianCalendar(Integer.parseInt(cursor.getString(4)),
 	    		Integer.parseInt(cursor.getString(5)),
 	    		Integer.parseInt(cursor.getString(6)),
 	    		Integer.parseInt(cursor.getString(7)),
+	    		Integer.parseInt(cursor.getString(8)),
 	    		0); 
-	    GregorianCalendar due = new GregorianCalendar(Integer.parseInt(cursor.getString(8)),
-	    		Integer.parseInt(cursor.getString(9)),
+	    GregorianCalendar due = new GregorianCalendar(Integer.parseInt(cursor.getString(9)),
 	    		Integer.parseInt(cursor.getString(10)),
 	    		Integer.parseInt(cursor.getString(11)),
 	    		Integer.parseInt(cursor.getString(12)),
+	    		Integer.parseInt(cursor.getString(13)),
 	    		0); 
 	    Task task = new Task(
 	    		Integer.parseInt(cursor.getString(0)),		//id
-	            cursor.getString(1),						//name
-	            cursor.getString(2),						//description
+	    		cursor.getString(1),						//server id
+	            cursor.getString(2),						//name
+	            cursor.getString(3),						//description
 	            start,										//start calendar
 	            due,										//due calendar
-	            (cursor.getInt(13) == 1),	//notify flag
-	            Importancy.valueOf(cursor.getString(14)),	//Importance enum
-	            Double.parseDouble(cursor.getString(15)),	//lat
-	            Double.parseDouble(cursor.getString(16)),    //long
-	            (cursor.getInt(17) == 1)	//done flag
+	            (cursor.getInt(14) == 1),	//notify flag
+	            Importancy.valueOf(cursor.getString(15)),	//Importance enum
+	            Double.parseDouble(cursor.getString(16)),	//lat
+	            Double.parseDouble(cursor.getString(17)),    //long
+	            (cursor.getInt(18) == 1)	//done flag
 	            );
 	    return task;
 	}

@@ -2,6 +2,7 @@ package il.ac.shenkar.mobile.todoApp;
 
 import com.example.my_todo_app.R;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,11 +64,25 @@ public class TaskListBaseAdapter extends BaseAdapter
 		if(taskDal.getTask(position).isDone())
 		{
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG );
+			//set done task text to green
+			holder.txt_taskName.setTextColor(Color.GREEN);
 		}
 		else
 		{
 			holder.txt_taskName.setPaintFlags(holder.txt_taskName.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
+			//check if task is late
+			if(taskDal.getTask(position).getDueDate().getTimeInMillis() < System.currentTimeMillis())
+			{
+				//set done task text to green
+				holder.txt_taskName.setTextColor(Color.RED);				
+			}
+			else
+			{
+				//set text color to black
+				holder.txt_taskName.setTextColor(Color.WHITE);
+			}
 		}
+
 		//set the task id as the checkbox tag - so we can interpret a checkbox pressure to task id
 		int taskId = taskDal.getTask(position).getTaskId();
 		holder.chk_isDone.setTag(taskId);

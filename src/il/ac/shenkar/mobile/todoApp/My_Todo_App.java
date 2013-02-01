@@ -2,6 +2,8 @@ package il.ac.shenkar.mobile.todoApp;
 
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import com.example.my_todo_app.R;
 import android.view.LayoutInflater;
@@ -12,12 +14,16 @@ import android.os.Handler;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.PopupWindow;
@@ -29,6 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class My_Todo_App extends Activity 
 {
 	Dal taskDal = null;
+	private final long miliSecsInDay = 24*3600*1000;
 	public final static String EXTRA_MESSAGE = "com.example.my_todo_app.MESSAGE";
 	@Override
     public void onCreate(Bundle savedInstanceState) 
@@ -49,9 +56,23 @@ public class My_Todo_App extends Activity
         		Toast.makeText(My_Todo_App.this, "You have chosen : " + " " + obj_itemDetails.getTaskName(), Toast.LENGTH_LONG).show();
         	}
         });
+        //create daily alarm to update task from server
+        Context context = getApplicationContext();
+        Intent intent = new Intent(context, ServerSyncService.class);
+        PendingIntent pIntent = PendingIntent.getService(context,0,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pIntent);
+        //create todays calendar & zerosize the time - to midnight
+        GregorianCalendar now =  new GregorianCalendar();
+        now.set(Calendar.HOUR, 0);
+        now.set(Calendar.HOUR_OF_DAY, 0);
+        now.set(Calendar.MINUTE, 0);
+        now.set(Calendar.SECOND, 0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,now.getTimeInMillis() , miliSecsInDay, pIntent);
+        // DEBUG ONLY - IMMIDIATE CALL THE INTENT
+        //startService(intent);
     }
-    
-    @TargetApi(16)
+	@TargetApi(16)
 	public void addTask(View view) 		//open "add task" activity in response to button
     {
     	Intent intent = new Intent(this, NewTaskActivity.class);
@@ -63,7 +84,15 @@ public class My_Todo_App extends Activity
         getMenuInflater().inflate(R.menu.activity_my__todo__app, menu);
         return true;
     }
-
+    @Override
+    public void onNewIntent(Intent intent)
+    {
+		final int taskToShowId = intent.getIntExtra("task_id", -1);
+		//put dummy data inside the intent for next time
+		intent.putExtra("task_id", -1);
+		//call method to show pop-up
+		showPopup(taskToShowId);
+    }
 	@Override
 	protected void onResume()
 	{
@@ -73,22 +102,10 @@ public class My_Todo_App extends Activity
 		super.onResume();
 		Intent myIntent = this.getIntent();
 		final int taskToShowId = myIntent.getIntExtra("task_id", -1);
-        //get the wakeup intent, get the task to show id(if existed) & show the selected task
-		if(taskToShowId != -1)
-		{
-			//put dummy data inside the intent for next time
-			myIntent.putExtra("task_id", -1);
-			//wait until the activity will be loaded & show the pop up 
-			new Handler().postDelayed(new Runnable() {
-					public void run() 
-					{
-						if(true)
-						{
-							showTask(taskToShowId);
-						}
-					}
-		    	}, 100);
-		}
+		//put dummy data inside the intent for next time
+		myIntent.putExtra("task_id", -1);
+		//call method to show pop-up
+		showPopup(taskToShowId);
 	}
 	//the method called when short - pressing a task
 	public void onTaskPicked(View v)
@@ -170,10 +187,11 @@ public class My_Todo_App extends Activity
 	    {
 		     public void onClick(View v) 
 		     {
-		//     	Intent intent = new Intent(this, NewTaskActivity.class);
-		  //  	startActivity(intent);
-		    	 Toast.makeText(My_Todo_App.this, "edit", Toast.LENGTH_LONG).show();
-		    	 //TODO - go to mission edit
+		    	Context context = getApplicationContext();
+		     	Intent intent = new Intent(context, NewTaskActivity.class);
+		     	intent.putExtra("edit_task_id", selectedTask.getTaskId());
+		    	startActivity(intent);
+		    	popupWindow.dismiss();
 		     }
 		 });
 	    //delete button
@@ -222,14 +240,47 @@ public class My_Todo_App extends Activity
 	    //update notify flag	   
 		if(selectedTask.getNotifyFlag())
 		{
-			 ((TextView)popupView.findViewById(R.id.pop_notify)).setText("Notifing uppon due date"); 			
+			 ((TextView)popupView.findViewById(R.id.pop_notify)).setText(getString (R.string.notifying_message)); 			
 		}
 		else
 		{
-			 ((TextView)popupView.findViewById(R.id.pop_notify)).setText("Not Notifing uppon due date");
+			 ((TextView)popupView.findViewById(R.id.pop_notify)).setText(getString (R.string.not_notifying_message));
 		}
+		//select task status image
+		//case the task is done
+		if(selectedTask.isDone())
+		{
+			 ((ImageView)popupView.findViewById(R.id.status_light)).setImageDrawable(getResources().getDrawable(R.drawable.done));
+		}
+		//in case the task is late
+		else if(selectedTask.getDueDate().getTimeInMillis() < System.currentTimeMillis())
+		{
+			 ((ImageView)popupView.findViewById(R.id.status_light)).setImageDrawable(getResources().getDrawable(R.drawable.late));
+		}
+		//in case the task is at work
+		else if(selectedTask.getDueDate().getTimeInMillis() < System.currentTimeMillis())
+		{
+			 ((ImageView)popupView.findViewById(R.id.status_light)).setImageDrawable(getResources().getDrawable(R.drawable.atwork));
+		}		
 	    popupWindow.setOutsideTouchable(false);
 	    popupWindow.showAsDropDown(this.findViewById(R.id.horizontal_line), 20, -80);
+	}
+	private void showPopup(final int taskToShowId)
+	{
+		 //get the wakeup intent, get the task to show id(if existed) & show the selected task
+		if(taskToShowId != -1)
+		{
+			//wait until the activity will be loaded & show the pop up 
+			new Handler().postDelayed(new Runnable() {
+					public void run() 
+					{
+						if(true)
+						{
+							showTask(taskToShowId);
+						}
+					}
+		    	}, 100);
+		}
 	}
 }
 
