@@ -78,7 +78,7 @@ public class TaskListBaseAdapter extends BaseAdapter
 			}
 			else
 			{
-				//set text color to black
+				//set text color to white
 				holder.txt_taskName.setTextColor(Color.WHITE);
 			}
 		}

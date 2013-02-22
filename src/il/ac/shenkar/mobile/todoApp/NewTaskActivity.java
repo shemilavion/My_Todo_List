@@ -220,37 +220,13 @@ public class NewTaskActivity extends Activity
     	selectedDate.set(Calendar.MINUTE,selectedTime.get(Calendar.MINUTE));
     	selectedDate.set(Calendar.AM_PM,selectedTime.get(Calendar.AM_PM));
     	newTask.setDueDate(selectedDate);
-    	//get loaction
+    	//get location
 
-/* 		//set location string
- 		List<Address> addList = null;
- 		
-		try 
-		{
-			addList = geoc.getFromLocation(inputTask.getTaskLat(), inputTask.getTaskLong(), 1);
-		} 
-		catch (IOException e) 
-		{
-			((Button)findViewById(R.id.location_button)).setText("Invalid Location");
-		}
-		if(addList != null && addList.size() != 0)
-		{
-			String add = addList.get(0).getAddressLine(0);
-			((Button)findViewById(R.id.location_button)).setText(add);
-		}
-		else
-		{
-			((Button)findViewById(R.id.location_button)).setText("Invalid Location");
-		}    	
-    	
-    	
-    	*/
-    	
-    	
-    	
-    	
-    	
-    	
+		//set location string
+    	if(selectedAddress != null)
+    	{
+    		newTask.setTaskLat(selectedAddress.get);
+    	}
     	//get task priority
     	Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
     	newTask.setImportancy((Importancy)spinner.getSelectedItem());

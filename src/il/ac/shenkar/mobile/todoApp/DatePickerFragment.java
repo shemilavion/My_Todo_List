@@ -19,6 +19,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 	//constructor
 	public DatePickerFragment()
 	{
+		//TODO - replace 1800000 half an hour for task delay 
 		cal.setTimeInMillis(System.currentTimeMillis()+1800000);
 	}
 	@Override
