@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/address_row"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+		<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="horizontal"
+	    android:paddingLeft="5dip"
+	    android:paddingRight="5dip"
+	    android:paddingTop="8dip"
+	    android:paddingBottom="8dip">
+			<TextView 
+			    android:id="@+id/address"
+				android:textSize="20sp" 
+				android:textStyle="bold" 
+				android:textColor="#FFFFFF" 
+				android:layout_centerVertical="true"
+				android:layout_alignParentRight = "true"	
+				android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"
+				android:gravity="right"/>
+			<TextView 
+			    android:id="@+id/state"
+				android:textSize="14sp" 
+				android:textStyle="italic" 
+				android:textColor="#FFFFFF" 
+				android:layout_alignParentLeft = "true"	
+				android:layout_centerVertical="true"
+				android:gravity="left"
+				android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"/>
+		</RelativeLayout>
+			<TextView 
+			    android:id="@+id/distance"
+				android:textSize="12sp" 
+				android:textStyle="italic" 
+				android:textColor="#FFFFFF" 
+				android:gravity="right"
+				android:layout_width="fill_parent" 
+				android:layout_height="fill_parent"/>
+</LinearLayout>

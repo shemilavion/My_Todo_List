@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/address_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="vertical" >
+        <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/location_picker"
+        android:src="@drawable/google_maps_icon" />
+       <EditText 
+           	android:id="@+id/task_address"
+			android:layout_weight = "1"
+			android:layout_marginTop="6dp"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
+	        android:layout_marginBottom="4dp"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:textSize="20sp"  
+			android:textColor="#404040"
+			android:maxLength="50"
+			android:maxLines="1"  
+			android:background="@drawable/rounded_edges" 
+			android:hint="@string/enter_address"/>
+   		<Button
+			android:id="@+id/search_button"
+			android:layout_weight = "1"
+			android:textColor="#404040"
+			android:layout_marginTop="6dp"
+			android:layout_marginBottom="6dp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/button_address_search"
+			android:background = "@drawable/dual_button"/>
+	    <ListView 
+			android:id="@+id/listV_addreses"
+	 		android:layout_height="match_parent"
+	 		android:layout_width="match_parent"
+	 		android:layout_weight="1"
+	 		android:layout_margin = "10dp"
+	 		android:divider="#000000"
+	    	android:dividerHeight="2dp" 
+	 		android:background="@drawable/rounded_list_back"/>
+</LinearLayout>

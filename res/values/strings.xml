@@ -23,8 +23,7 @@
 	<string name="priority_prompt">Select Priority :</string>
 	<string name="notify">Notify upon due date?</string>
 	<string name="enter_task_date">Pick Task Due Date</string>
-	<string name="dateRequest">Pick Due Date</string>
-	<string name="timeRequest">Pick Due Time</string>
+	<string name="pick_a_location">Pick Task Location</string>
 	<string name="pop_done">Done</string>
 	<string name="edit_task">Edit</string>
 	<string name="del_task">Delete</string>
@@ -35,7 +34,10 @@
 	<string name="urlString">http://mobile1-tasks-dispatcher.herokuapp.com/task/random</string>
 	<string name="random_con_err">cannot establish connection to server</string>
 	<string name="task_due_calendar">Due date and time:</string>
-	<string name="downloading">Downloading Task From Web Server...</string>
+	<string name="button_address_search">Search address</string>
+	<string name="enter_address">Enter address here&#8230;</string>
+	<string name="location_picker">loaction picker logo</string>		
+	<string name="downloading">Downloading Task From Web Server&#8230;</string>
 	<string name="net_err_head">Internet Connection Error</string>
 	<string name="net_err_msg">Please connect the internet and Try again</string>  	
 	

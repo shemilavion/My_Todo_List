@@ -8,13 +8,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal" 
+    android:gravity="center_horizontal"
+    android:layout_gravity="center_horizontal"
     android:layout_marginBottom="0dp"
-    android:layout_marginLeft="0dp"
     >
 	<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
    	 	android:id="@+id/tableLayout2"
-   	 	android:layout_marginTop="100dp"
-   	 	android:layout_marginLeft="40dp"
+   	 	android:layout_marginTop="75dp"
+		android:gravity="center_horizontal"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content">
     	<TableRow
@@ -31,13 +32,13 @@
 		  		android:text="@string/task_name" 
 		  		android:textSize="12sp"
 		  		android:textStyle="bold"  
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 			<TextView
 			    android:id="@+id/pop_task_name"
 				android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content" 
 		  		android:textSize="12sp" 
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
     	 </TableRow>
     	    <TableRow
         	android:id="@+id/taskRow2"
@@ -53,13 +54,13 @@
 		  		android:text="@string/task_details" 
 		  		android:textSize="12sp"
 		  		android:textStyle="bold"  
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 			<TextView
 			    android:id="@+id/pop_task_desc"
 				android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content" 
 		  		android:textSize="12sp" 
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
     	</TableRow>
     	<TableRow
         	android:id="@+id/taskRow3"
@@ -75,13 +76,13 @@
 		  		android:text="@string/start_date" 
 		  		android:textSize="12sp"
 		  		android:textStyle="bold"  
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 				<TextView
 			    android:id="@+id/pop_start"
 				android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content" 
 		  		android:textSize="12sp" 
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
     	</TableRow>
     	<TableRow
         	android:id="@+id/taskRow4"
@@ -97,13 +98,13 @@
 		  		android:text="@string/due_date" 
 		  		android:textSize="12sp"
 		  		android:textStyle="bold"  
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 				<TextView
 			    android:id="@+id/pop_end"
 				android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content" 
 		  		android:textSize="12sp" 
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 		</TableRow>
     	<TableRow
         	android:id="@+id/taskRow5"
@@ -119,13 +120,13 @@
 		  		android:text="@string/task_priority" 
 		  		android:textSize="12sp"
 		  		android:textStyle="bold"  
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 			<TextView
 			    android:id="@+id/pop_priority"
 				android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content" 
 		  		android:textSize="12sp" 
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
     	</TableRow>
     	<TableRow
         	android:id="@+id/taskRow6"
@@ -141,13 +142,13 @@
 		  		android:text="@string/notify_flag" 
 		  		android:textSize="12sp"
 		  		android:textStyle="bold"  
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
 			<TextView
 			    android:id="@+id/pop_notify"
 				android:layout_width="fill_parent"
 		  		android:layout_height="wrap_content" 
 		  		android:textSize="12sp" 
-				android:textColor="#000000" />
+				android:textColor="#FFFFFF" />
     	</TableRow>
      </TableLayout>
      <ImageView
@@ -163,8 +164,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="horizontal" 
+      android:gravity="center_horizontal"
+      android:layout_gravity="center_horizontal"
       android:layout_marginBottom="0dp"
-      android:layout_marginLeft="50dp"
       >
       <Button
           android:id="@+id/popup_done"

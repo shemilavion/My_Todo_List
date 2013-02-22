@@ -6,9 +6,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import com.example.my_todo_app.R;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.SuppressLint;
@@ -20,6 +21,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.view.Menu;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -27,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.PopupWindow;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -170,8 +173,14 @@ public class My_Todo_App extends Activity
 		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
 						.getSystemService(LAYOUT_INFLATER_SERVICE);  
 	    View popupView = layoutInflater.inflate(R.layout.task_popup, null);  
-	    final PopupWindow popupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT,  
-	                     LayoutParams.WRAP_CONTENT);
+	    Display display = getWindowManager().getDefaultDisplay();
+	    Point size = new Point();
+	    display.getSize(size);
+	    int width = size.x;
+	    int height = size.y;
+	    //debug only - write to popup size to log
+	    //Log.e("pw","height: "+String.valueOf(height)+", width: "+String.valueOf(width));
+	    final PopupWindow popupWindow = new PopupWindow(popupView, width, height);
 	    //done button
 	    Button btnDismiss = (Button)popupView.findViewById(R.id.popup_done);
 	    btnDismiss.setOnClickListener(new Button.OnClickListener()

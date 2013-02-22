@@ -1,12 +1,18 @@
 package il.ac.shenkar.mobile.todoApp;
 
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+
 import com.example.my_todo_app.R;
+
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -40,8 +46,12 @@ public class NewTaskActivity extends Activity
 	private Dal taskDal = null;
 	private DialogFragment dateFragment;
 	private DialogFragment timeFragment;
+	private DialogFragment locationFragment;
 	private static final String dateFragmentTag = "datePicker";
 	private static final String timeFragmentTag = "timePicker";
+	private static final String locationFragmentTag = "locationPicker";
+	private Address selectedAddress = null;
+	private Geocoder geoc = null;
 	int editedId = -1;
 	private ProgressDialog progressDialod;
 	//5 MINUTS IN MILL's
@@ -57,6 +67,8 @@ public class NewTaskActivity extends Activity
         Spinner mySpinner = (Spinner) findViewById(R.id.priority_spinner);
         dateFragment = new DatePickerFragment();
         timeFragment = new TimePickerFragment();
+        // Create an instance of addresses fragment
+        locationFragment = new LocationPickerFragment(this);
         mySpinner.setAdapter(new ArrayAdapter<Importancy>(this, android.R.layout.simple_spinner_item, Importancy.values()));
         taskDal = Dal.getDal(this); 
     	Intent incomeIntent = this.getIntent();
@@ -169,6 +181,23 @@ public class NewTaskActivity extends Activity
 	 		new AsyncTaskWebServer(this).execute(tasksServerUrl);
     	}		
     }
+    //pick a location method - called when location button picked on new task activity 
+    public void pickLocation(View view)
+	{
+    	FragmentManager = getFragmentManager();
+        //create & show the location picker
+    	locationFragment.show(FragmentManager, locationFragmentTag);
+	}
+    public void updateLocation(Address add)
+    {
+    	selectedAddress = add;
+ 		//create geo-coder
+ 		if(geoc == null)
+ 		{
+ 			geoc = new Geocoder(this);
+ 		}
+ 		((Button)findViewById(R.id.location_button)).setText(selectedAddress.getAddressLine(0) + ", " + selectedAddress.getAddressLine(1));
+    }
     public void createTask(View view)
     {
     	//case of editing mode - delete old task first
@@ -191,6 +220,37 @@ public class NewTaskActivity extends Activity
     	selectedDate.set(Calendar.MINUTE,selectedTime.get(Calendar.MINUTE));
     	selectedDate.set(Calendar.AM_PM,selectedTime.get(Calendar.AM_PM));
     	newTask.setDueDate(selectedDate);
+    	//get loaction
+
+/* 		//set location string
+ 		List<Address> addList = null;
+ 		
+		try 
+		{
+			addList = geoc.getFromLocation(inputTask.getTaskLat(), inputTask.getTaskLong(), 1);
+		} 
+		catch (IOException e) 
+		{
+			((Button)findViewById(R.id.location_button)).setText("Invalid Location");
+		}
+		if(addList != null && addList.size() != 0)
+		{
+			String add = addList.get(0).getAddressLine(0);
+			((Button)findViewById(R.id.location_button)).setText(add);
+		}
+		else
+		{
+			((Button)findViewById(R.id.location_button)).setText("Invalid Location");
+		}    	
+    	
+    	
+    	*/
+    	
+    	
+    	
+    	
+    	
+    	
     	//get task priority
     	Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
     	newTask.setImportancy((Importancy)spinner.getSelectedItem());
@@ -260,6 +320,11 @@ public class NewTaskActivity extends Activity
  		{
  			return;
  		}
+ 		//create geo-coder
+ 		if(geoc == null)
+ 		{
+ 			geoc = new Geocoder(this);
+ 		}
  		//set task name field
  		((EditText)findViewById(R.id.new_task_name)).setText(inputTask.getTaskName());
  		//set task description field
@@ -271,6 +336,25 @@ public class NewTaskActivity extends Activity
  		//set due time field
  		sdf = new SimpleDateFormat("hh:mm");
  		((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
+ 		//set location string
+ 		List<Address> addList = null;
+		try 
+		{
+			addList = geoc.getFromLocation(inputTask.getTaskLat(), inputTask.getTaskLong(), 1);
+		} 
+		catch (IOException e) 
+		{
+			((Button)findViewById(R.id.location_button)).setText("No Location");
+		}
+		if(addList != null && addList.size() != 0)
+		{
+			String add = addList.get(0).getAddressLine(0);
+			((Button)findViewById(R.id.location_button)).setText(add);
+		}
+		else
+		{
+			((Button)findViewById(R.id.location_button)).setText("No Location");
+		}
  		//set task priority
  		((Spinner)findViewById(R.id.priority_spinner)).setSelection(inputTask.getImportancy().getValue());
  		//set notify check box
@@ -294,6 +378,11 @@ public class NewTaskActivity extends Activity
     {
     	this.progressDialod.cancel();
     }
- 	
+ 	public void closeKeyBoard()
+ 	{
+ 		//hide the soft keyboard
+	    final InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+	    imm.hideSoftInputFromWindow(((EditText)findViewById(R.id.new_task_name)).getWindowToken(), 0);
+ 	}
 }
 

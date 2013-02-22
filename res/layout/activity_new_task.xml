@@ -100,12 +100,24 @@
 	       android:layout_marginLeft="2dp"
 	       android:layout_marginRight="2dp"
 	       android:layout_marginBottom="4dp"
-	       android:layout_width="0dp"
 	       android:layout_height="wrap_content"
+	       android:layout_width="wrap_content"
 	       android:textSize="20sp"  
 	       android:background = "@drawable/dual_button"
-	       android:text="@string/dateRequest"
 	       android:onClick="pickDate" />
+        <Button
+           android:layout_weight = "1"
+	       android:id="@+id/new_task_time"
+	       android:textColor="#404040"
+	       android:layout_marginTop="6dp"
+	       android:layout_marginLeft="2dp"
+	       android:layout_marginRight="2dp"
+	       android:layout_marginBottom="4dp"
+	       android:layout_height="wrap_content"
+	       android:layout_width="wrap_content"
+	       android:textSize="20sp"  
+	       android:background = "@drawable/dual_button"
+	       android:onClick="pickTime" />
     </TableRow>
         <TableRow
         android:id="@+id/tableRow6"
@@ -115,20 +127,20 @@
         android:paddingLeft="5dip"
         android:paddingTop="5dip"
         android:paddingBottom="5dip">
-        <Button
+ 		<Button
            android:layout_weight = "1"
-	       android:id="@+id/new_task_time"
+	       android:id="@+id/location_button"
 	       android:textColor="#404040"
 	       android:layout_marginTop="6dp"
 	       android:layout_marginLeft="2dp"
 	       android:layout_marginRight="2dp"
 	       android:layout_marginBottom="4dp"
-	       android:layout_width="0dp"
 	       android:layout_height="wrap_content"
-	       android:textSize="20sp"  
+	       android:layout_width="wrap_content"
+	       android:textSize="20sp"
+	       android:text="@string/pick_a_location"  
 	       android:background = "@drawable/dual_button"
-	       android:text="@string/timeRequest"
-	       android:onClick="pickTime" />
+	       android:onClick="pickLocation" />
     </TableRow>
     <TableRow
         android:id="@+id/tableRow7"
