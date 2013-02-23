@@ -182,12 +182,12 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         values.put(KEY_ST_YR, newTask.getStartDate().get(Calendar.YEAR)); 			// task start year
         values.put(KEY_ST_MON, newTask.getStartDate().get(Calendar.MONTH)); 		// task start month
         values.put(KEY_ST_DAY, newTask.getStartDate().get(Calendar.DAY_OF_MONTH));	// task start day
-        values.put(KEY_ST_HOUR, newTask.getStartDate().get(Calendar.HOUR)); 		// task start hour
+        values.put(KEY_ST_HOUR, newTask.getStartDate().get(Calendar.HOUR_OF_DAY)); 		// task start hour
         values.put(KEY_ST_MIN, newTask.getStartDate().get(Calendar.MINUTE));		// task start minutes
         values.put(KEY_DUE_YR, newTask.getDueDate().get(Calendar.YEAR));			// task end year
         values.put(KEY_DUE_MON, newTask.getDueDate().get(Calendar.MONTH));			// task end year
         values.put(KEY_DUE_DAY, newTask.getDueDate().get(Calendar.DAY_OF_MONTH));	// task end year
-        values.put(KEY_DUE_HOUR, newTask.getDueDate().get(Calendar.HOUR));			// task end year
+        values.put(KEY_DUE_HOUR, newTask.getDueDate().get(Calendar.HOUR_OF_DAY));			// task end year
         values.put(KEY_DUE_MIN, newTask.getDueDate().get(Calendar.MINUTE));			// task end year
         values.put(KEY_NOT, newTask.getNotifyFlag()); 								// Contact Name
         values.put(KEY_IMP, newTask.getImportancy().toString()); 					// Contact Name

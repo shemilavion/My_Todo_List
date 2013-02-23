@@ -40,5 +40,8 @@
 	<string name="downloading">Downloading Task From Web Server&#8230;</string>
 	<string name="net_err_head">Internet Connection Error</string>
 	<string name="net_err_msg">Please connect the internet and Try again</string>  	
-	
+	<string name="navigate_to_task">Navigate</string>
+	<string name="share_task">Share task</string>
+	<string name="address_distance_suffix">km` from your location</string>
+	<string name="location_nullness">No Location</string>
 </resources>

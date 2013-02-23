@@ -6,10 +6,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import com.example.my_todo_app.R;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.annotation.SuppressLint;
@@ -29,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.PopupWindow;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -74,6 +75,24 @@ public class My_Todo_App extends Activity
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,now.getTimeInMillis() , miliSecsInDay, pIntent);
         // DEBUG ONLY - IMMIDIATE CALL THE INTENT
         //startService(intent);
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() 
+        {
+            public void onLocationChanged(Location location)
+            {
+              // Called when a new location is found by the network location provider.
+            }
+            public void onStatusChanged(String provider, int status, Bundle extras) 
+            {}
+            public void onProviderEnabled(String provider) 
+            {}
+            public void onProviderDisabled(String provider) 
+            {}
+          };
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
     }
 	@TargetApi(16)
 	public void addTask(View view) 		//open "add task" activity in response to button
@@ -234,7 +253,7 @@ public class My_Todo_App extends Activity
 		    		 
 		     }
 		 });
-		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - hh:mm",Locale.CANADA);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
 	    //get the selected task 
 	    //update name field
 	    ((TextView)popupView.findViewById(R.id.pop_task_name)).setText(selectedTask.getTaskName());

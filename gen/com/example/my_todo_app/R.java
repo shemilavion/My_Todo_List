@@ -57,7 +57,8 @@ public final class R {
         public static final int listV_main=0x7f070004;
         public static final int location_button=0x7f070010;
         public static final int main_screen=0x7f070000;
-        public static final int menu_settings=0x7f070035;
+        public static final int menu_settings=0x7f070037;
+        public static final int navigate_to_task=0x7f070036;
         public static final int new_task_date=0x7f07000d;
         public static final int new_task_description=0x7f07000a;
         public static final int new_task_name=0x7f070008;
@@ -74,6 +75,7 @@ public final class R {
         public static final int random_button=0x7f070017;
         public static final int search_button=0x7f07001f;
         public static final int set_button=0x7f070002;
+        public static final int share_task=0x7f070035;
         public static final int state=0x7f07001b;
         public static final int status_light=0x7f070031;
         public static final int tableLayout1=0x7f070005;
@@ -109,6 +111,7 @@ public final class R {
         public static final int activity_new_task=0x7f060001;
     }
     public static final class string {
+        public static final int address_distance_suffix=0x7f04002a;
         public static final int app_name=0x7f040000;
         public static final int button_add=0x7f040001;
         public static final int button_address_search=0x7f040022;
@@ -127,8 +130,10 @@ public final class R {
         public static final int enter_task_details=0x7f04000b;
         public static final int enter_task_name=0x7f04000c;
         public static final int hello_world=0x7f040006;
+        public static final int location_nullness=0x7f04002b;
         public static final int location_picker=0x7f040024;
         public static final int menu_settings=0x7f040002;
+        public static final int navigate_to_task=0x7f040028;
         public static final int net_err_head=0x7f040026;
         public static final int net_err_msg=0x7f040027;
         public static final int not_notifying_message=0x7f04001e;
@@ -140,6 +145,7 @@ public final class R {
         public static final int priority_prompt=0x7f040014;
         public static final int random_con_err=0x7f040020;
         public static final int save_changes=0x7f04001c;
+        public static final int share_task=0x7f040029;
         public static final int start_date=0x7f04000f;
         public static final int task_details=0x7f04000e;
         public static final int task_due_calendar=0x7f040021;

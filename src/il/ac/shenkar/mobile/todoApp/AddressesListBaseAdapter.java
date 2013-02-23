@@ -1,10 +1,18 @@
 package il.ac.shenkar.mobile.todoApp;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.Context;
 import android.location.Address;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +26,7 @@ public class AddressesListBaseAdapter extends BaseAdapter
 	private List<Address> addreses = new ArrayList<Address>();
 	private LayoutInflater l_Inflater;
 	private Context cont;
+	private final int fixUpdateConst = 30000;
 	//constructor
 	public AddressesListBaseAdapter(Context context) 
 	{
@@ -65,8 +74,57 @@ public class AddressesListBaseAdapter extends BaseAdapter
 		//set address to list item
 		holder.txt_address.setText(addreses.get(position).getAddressLine(0));
 		holder.txt_state.setText(addreses.get(position).getAddressLine(1));
-		holder.txt_distance.setText("test1");
+		//calculate distance to destination from my location
+		//get the location service & create criteria
+		LocationManager locMan = (LocationManager) cont.getSystemService(Context.LOCATION_SERVICE);
+		Criteria crit = new Criteria();
+		//set accuracy to fine - try GPS first...
+		crit.setAccuracy(Criteria.ACCURACY_FINE);
+		String provider = locMan.getBestProvider(crit, true);
+		Location loc = null;
+		long fixTime = 0;
 		
+		//if gps location avail...
+		if(provider != null)
+		{
+			loc = locMan.getLastKnownLocation(provider);	
+			fixTime = loc.getTime(); 
+		}
+		//set accuracy to course - try network now...
+		crit.setAccuracy(Criteria.ACCURACY_COARSE);
+		provider = locMan.getBestProvider(crit, true);
+		if(provider != null)
+		{
+			loc = locMan.getLastKnownLocation(provider);	
+			long netFixTime = loc.getTime();
+			if(netFixTime > fixTime)
+			{
+				fixTime = netFixTime;
+			}
+		}
+	//DEBUG only! print fix update time 
+		GregorianCalendar fixCal = new GregorianCalendar();
+		fixCal.setTimeInMillis(fixTime);
+		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
+		System.out.println(sdf.format(fixCal.getTime()));
+	//END OF DEBUG ONLY SECTION
+		//check fix relevance
+		if( (System.currentTimeMillis() - fixTime) < fixUpdateConst )
+		{
+			Location dest = new Location(provider);
+			dest.setLatitude(addreses.get(position).getLatitude());
+			dest.setLongitude(addreses.get(position).getLongitude());
+			double distance = loc.distanceTo(dest);
+			distance = distance/1000;
+			DecimalFormat df = new DecimalFormat("#.#");
+			String dis=df.format(distance);
+			holder.txt_distance.setText(dis + cont.getString(R.string.address_distance_suffix));
+		}
+		//if fix is not relevant - ignore the distance
+		else
+		{
+			holder.txt_distance.setText("");
+		}
 		return convertView;
 	}
 	

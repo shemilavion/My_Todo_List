@@ -46,6 +46,8 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 	{
 		return cal;
 	}
-
-	
+	public void setDate(GregorianCalendar newCal)
+	{
+		 cal = newCal;
+	}
 }

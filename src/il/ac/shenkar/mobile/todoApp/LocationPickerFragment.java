@@ -6,17 +6,12 @@ import com.example.my_todo_app.R;
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -24,10 +19,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
@@ -95,8 +87,6 @@ public class LocationPickerFragment extends DialogFragment
 		//get address query string
 		EditText editText = (EditText) getView().findViewById(R.id.task_address);
 		String addQuery = editText.getText().toString();
-		//get the location service
-		LocationManager loc = (LocationManager) caller.getSystemService(Context.LOCATION_SERVICE);
 		try 
 		{
 			 addreses = geoc.getFromLocationName(addQuery, geocoderMaxQueryNum);

@@ -79,6 +79,7 @@ public class NewTaskActivity extends Activity
         	((Button)findViewById(R.id.create_button)).setText(getString (R.string.save_changes));
         	//call method to display task data
         	this.fillTaskForm(taskDal.getTaskById(taskToEditId));
+        	closeKeyBoard();
         }
     }
 
@@ -86,14 +87,18 @@ public class NewTaskActivity extends Activity
 	protected void onResume() 
     {
 		super.onResume();
-		GregorianCalendar cal = new GregorianCalendar();
-		cal.setTimeInMillis(System.currentTimeMillis() + 1800000);
-		//set due date field
- 		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
- 		((Button)findViewById(R.id.new_task_date)).setText(sdf.format(cal.getTime()));
- 		//set due time field
- 		sdf = new SimpleDateFormat("hh:mm");
- 		((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
+		if(editedId == -1)
+		{
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTimeInMillis(System.currentTimeMillis() + 1800000);
+			//set due date field
+			SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
+			((Button)findViewById(R.id.new_task_date)).setText(sdf.format(cal.getTime()));
+			//set due time field
+			sdf = new SimpleDateFormat("hh:mm");
+			((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
+		}
+		closeKeyBoard();
 	}
 
 	@Override
@@ -216,7 +221,7 @@ public class NewTaskActivity extends Activity
     	newTask.setDueDate( ((DatePickerFragment)dateFragment).getDate());
     	GregorianCalendar selectedTime = ((TimePickerFragment)timeFragment).getTime();
     	GregorianCalendar selectedDate = newTask.getDueDate();
-    	selectedDate.set(Calendar.HOUR,selectedTime.get(Calendar.HOUR));
+    	selectedDate.set(Calendar.HOUR_OF_DAY,selectedTime.get(Calendar.HOUR_OF_DAY));
     	selectedDate.set(Calendar.MINUTE,selectedTime.get(Calendar.MINUTE));
     	selectedDate.set(Calendar.AM_PM,selectedTime.get(Calendar.AM_PM));
     	newTask.setDueDate(selectedDate);
@@ -225,7 +230,8 @@ public class NewTaskActivity extends Activity
 		//set location string
     	if(selectedAddress != null)
     	{
-    		newTask.setTaskLat(selectedAddress.get);
+    		newTask.setTaskLat(selectedAddress.getLatitude());
+    		newTask.setTaskLong(selectedAddress.getLongitude());
     	}
     	//get task priority
     	Spinner spinner = (Spinner) findViewById(R.id.priority_spinner);
@@ -260,6 +266,7 @@ public class NewTaskActivity extends Activity
 	    	,newTask.getDueDate().getTimeInMillis() - PRE_NOTIFY_TIME_IN_MILLES
 	    	,penIntent);
     	}
+    	editedId = -1;
     	finish();
     }
 
@@ -308,9 +315,13 @@ public class NewTaskActivity extends Activity
  		//set due date field
  		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
  		GregorianCalendar cal = inputTask.getDueDate();
+ 			//update time to new task time object
+ 			((DatePickerFragment)dateFragment).setDate(cal);
  		((Button)findViewById(R.id.new_task_date)).setText(sdf.format(cal.getTime()));
  		//set due time field
- 		sdf = new SimpleDateFormat("hh:mm");
+ 		sdf = new SimpleDateFormat("HH:mm");
+			//update time to new task time object
+			((TimePickerFragment)timeFragment).setTime(cal);
  		((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
  		//set location string
  		List<Address> addList = null;
@@ -324,12 +335,13 @@ public class NewTaskActivity extends Activity
 		}
 		if(addList != null && addList.size() != 0)
 		{
-			String add = addList.get(0).getAddressLine(0);
+			selectedAddress = addList.get(0);
+			String add = selectedAddress.getAddressLine(0) + ", " + selectedAddress.getAddressLine(1);
 			((Button)findViewById(R.id.location_button)).setText(add);
 		}
 		else
 		{
-			((Button)findViewById(R.id.location_button)).setText("No Location");
+			((Button)findViewById(R.id.location_button)).setText(getString(R.string.location_nullness));
 		}
  		//set task priority
  		((Spinner)findViewById(R.id.priority_spinner)).setSelection(inputTask.getImportancy().getValue());

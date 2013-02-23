@@ -28,7 +28,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 		// Use the current time as the default time in the picker + 30 min
 		final Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(c.getTimeInMillis()+1800000);
-		int hour = c.get(Calendar.HOUR);
+		int hour = c.get(Calendar.HOUR_OF_DAY);
 		int minuts = c.get(Calendar.MINUTE);
 		// Create a new instance of DatePickerDialog and return it
 		return new TimePickerDialog(getActivity(), this, hour, minuts, true);
@@ -38,10 +38,10 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	{
 		Button time = (Button) getActivity().findViewById(R.id.new_task_time);
 		//create calendar object & update the  hour & minute values
-		cal.set(Calendar.HOUR, hour);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
-		cal.set(Calendar.SECOND, 0);		
-		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
+		cal.set(Calendar.SECOND, 0);	
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 		time.setText(sdf.format(cal.getTime()));
 	}
 	// get the current selected time 
@@ -49,6 +49,9 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	{
 		return cal;
 	}
-
+	public void setTime(GregorianCalendar newTime)
+	{
+		cal = newTime;
+	}
 	
 }
