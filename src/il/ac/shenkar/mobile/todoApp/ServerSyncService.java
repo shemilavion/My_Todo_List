@@ -2,9 +2,6 @@ package il.ac.shenkar.mobile.todoApp;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.example.my_todo_app.R;
-
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;

@@ -5,7 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import com.example.my_todo_app.R;
+import com.google.analytics.tracking.android.EasyTracker;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,28 +26,56 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.view.Menu;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView;
 import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 @SuppressLint("NewApi")
-public class My_Todo_App extends Activity 
+public class My_Todo_App extends Activity implements OnItemSelectedListener
 {
-	Dal taskDal = null;
+	private Dal taskDal = null;
 	private final long miliSecsInDay = 24*3600*1000;
 	public final static String EXTRA_MESSAGE = "com.example.my_todo_app.MESSAGE";
+	//initial sorting algorithm to sort by due date
+	public SortingMannor sortingMannor = SortingMannor.BY_DUE_DATE;
+	//back button disable flag - if set to false - no disable will be applied, used for popup ...
+	private boolean backDisable = false;
+	@Override
+	protected void onStart() 
+	{
+		super.onStart();
+		EasyTracker.getInstance().activityStart(this);
+	}
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		EasyTracker.getInstance().activityStop(this);
+	}
+	@Override
+	public void onBackPressed() 
+	{
+	  if(backDisable != true)
+	  {
+		  super.onBackPressed();
+	  }
+	}
 	@Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         taskDal = Dal.getDal(this);
         setContentView(R.layout.activity_my__todo__app);
+        Log.i((String) getTitle(),"onCreste(), Main Activity Created" );
         final ListView tasksListView = (ListView) findViewById(R.id.listV_main);
         //set the listView adapter
         tasksListView.setAdapter(new TaskListBaseAdapter(this));
@@ -60,6 +89,16 @@ public class My_Todo_App extends Activity
         		Toast.makeText(My_Todo_App.this, "You have chosen : " + " " + obj_itemDetails.getTaskName(), Toast.LENGTH_LONG).show();
         	}
         });
+        //initial the sorting spinner
+        Spinner sortingSpinner = (Spinner) findViewById(R.id.sorting_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.sorting_mannor, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        sortingSpinner.setAdapter(adapter);
+        sortingSpinner.setOnItemSelectedListener(this);
         //create daily alarm to update task from server
         Context context = getApplicationContext();
         Intent intent = new Intent(context, ServerSyncService.class);
@@ -97,6 +136,7 @@ public class My_Todo_App extends Activity
 	@TargetApi(16)
 	public void addTask(View view) 		//open "add task" activity in response to button
     {
+		Log.i((String) getTitle(),"addTask(), openning new Activity" );
     	Intent intent = new Intent(this, NewTaskActivity.class);
     	startActivity(intent);
     }
@@ -118,8 +158,10 @@ public class My_Todo_App extends Activity
 	@Override
 	protected void onResume()
 	{
+		Log.i((String) getTitle(),"onResume(), Main Activity was resumed" );
 		final ListView tasksListView = (ListView) findViewById(R.id.listV_main);
         //set the listView adapter
+		taskDal.sortTasks(sortingMannor);
 		((BaseAdapter) tasksListView.getAdapter()).notifyDataSetChanged();
 		super.onResume();
 		Intent myIntent = this.getIntent();
@@ -139,6 +181,7 @@ public class My_Todo_App extends Activity
 	//this method activates when the delete button pressed in the main list view 
 	public void deleteTask(View v)
 	{
+		Log.i((String) getTitle(), "'Delete' button pressed, openning confermation dialog");
 		final int taskId = (Integer)v.getTag();
 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() 
 		{	
@@ -146,6 +189,7 @@ public class My_Todo_App extends Activity
 		    {
 		        switch (which){
 		        case DialogInterface.BUTTON_POSITIVE:
+		        	Log.i((String) getTitle(), "'Yes' button pressed, delete task option chose");
 		        	//yes button pressed
 		        	//delete the task
 		    		Task currTask = taskDal.getTaskById(taskId);
@@ -153,6 +197,7 @@ public class My_Todo_App extends Activity
 		            break;
 
 		        case DialogInterface.BUTTON_NEGATIVE:
+		        	Log.i((String) getTitle(), "'No' button pressed, Dismissing confermation dialog");
 		            //No button clicked
 		            break;
 		        }
@@ -166,6 +211,7 @@ public class My_Todo_App extends Activity
 	//this method activates when the done checkbox presseed in the main list view
 	public void onCheckedChanged(View v) 
 	{
+		Log.i((String) getTitle(), "done ChackBox Pressed");
 		int taskId = (Integer)v.getTag();
 		Task currTask = taskDal.getTaskById(taskId);
 		//if task doesnt exist - return to caller
@@ -176,6 +222,7 @@ public class My_Todo_App extends Activity
 		currTask.setIsDoneFlag(!currTask.isDone());
 		taskDal.deleteTask(currTask);
 		taskDal.addTask(currTask);
+		Log.i((String) getTitle(), "Updating data on main list");
 		final ListView tasksListView = (ListView) findViewById(R.id.listV_main);
         //set the listView adapter
 		((BaseAdapter) tasksListView.getAdapter()).notifyDataSetChanged();
@@ -189,6 +236,7 @@ public class My_Todo_App extends Activity
 		{
 			return;
 		}
+		Log.i((String) getTitle(), "Showing Task Details in popup window, begin to build popup configuration");
 		LayoutInflater layoutInflater = (LayoutInflater)getBaseContext()
 						.getSystemService(LAYOUT_INFLATER_SERVICE);  
 	    View popupView = layoutInflater.inflate(R.layout.task_popup, null);  
@@ -197,6 +245,7 @@ public class My_Todo_App extends Activity
 	    display.getSize(size);
 	    int width = size.x;
 	    int height = size.y;
+	    final SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
 	    //debug only - write to popup size to log
 	    //Log.e("pw","height: "+String.valueOf(height)+", width: "+String.valueOf(width));
 	    final PopupWindow popupWindow = new PopupWindow(popupView, width, height);
@@ -205,8 +254,11 @@ public class My_Todo_App extends Activity
 	    btnDismiss.setOnClickListener(new Button.OnClickListener()
 	    {
 		     public void onClick(View v) 
-		     {
+		     {	
+		    	 //update to back button state
+		    	 backDisable = false;
 		    	 popupWindow.dismiss();
+		    	 Log.i((String) getTitle(), "'Done' button pressed, dismissing popup window");
 		     }
 		 });
 	    //edit button
@@ -219,7 +271,10 @@ public class My_Todo_App extends Activity
 		     	Intent intent = new Intent(context, NewTaskActivity.class);
 		     	intent.putExtra("edit_task_id", selectedTask.getTaskId());
 		    	startActivity(intent);
+		    	//update the back button state
+		    	backDisable = false;
 		    	popupWindow.dismiss();
+		    	Log.i((String) getTitle(), "'Edit' button pressed, dismissing popup window ");
 		     }
 		 });
 	    //delete button
@@ -228,6 +283,7 @@ public class My_Todo_App extends Activity
 	    {
 		     public void onClick(View v) 
 		     {
+		    	Log.i((String) getTitle(), "'Delete' button pressed, openning confermation dialog");
 		 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() 
 				{	
 				    public void onClick(DialogInterface dialog, int which)
@@ -236,11 +292,15 @@ public class My_Todo_App extends Activity
 				        case DialogInterface.BUTTON_POSITIVE:
 				        	//yes button pressed
 				        	//delete task from dal
+				        	Log.i((String) getTitle(), "'Yes' button pressed, delete task option chose");
 				        	taskDal.deleteTask(selectedTask);
+					    	//update the back button state
+					    	backDisable = false;
 				        	popupWindow.dismiss();
 				            break;
 
 				        case DialogInterface.BUTTON_NEGATIVE:
+				        	Log.i((String) getTitle(), "'No' button pressed, Dismissing confermation dialog");
 				            //No button clicked
 				            break;
 				        }
@@ -253,7 +313,49 @@ public class My_Todo_App extends Activity
 		    		 
 		     }
 		 });
-		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
+	    //Share button
+	    Button btnsShare = (Button) popupView.findViewById(R.id.share_task);
+	    btnsShare.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				// Creating the massage i want to Share"
+				String msgToShare = "Task Title: "+selectedTask.getTaskName() + "\n" +"Task Description: "+ selectedTask.getTaskDescription() +"\n" +
+								"Task Due Date: "+sdf.format(selectedTask.getDueDate().getTime());
+				// Creating the Intent responsible for Sharing
+				Intent sendIntent = new Intent();
+				sendIntent.setAction(Intent.ACTION_SEND);
+				sendIntent.putExtra(Intent.EXTRA_TEXT, msgToShare);
+				sendIntent.setType("text/plain");
+				startActivity(sendIntent);
+				Log.i((String) getTitle(), "'Share' button pressed, Sharing task details acording to user input");
+			}
+		});
+	  //location button
+	    Button btnLocation = (Button)popupView.findViewById(R.id.navigate_to_task);
+	    //first check if task have a location. if not, disable button. 
+	    if(selectedTask.getTaskLat() == -1 || selectedTask.getTaskLong() == -1)
+	    {
+	    	btnLocation.setEnabled(false);
+	    	btnLocation.setText(getString(R.string.location_nullness));
+	    }
+	    else
+	    {
+	    	btnLocation.setEnabled(true);
+	    	btnLocation.setText(getString(R.string.show_task_on_map));
+	    }
+	    
+	    btnLocation.setOnClickListener(new Button.OnClickListener()
+	    {
+
+	    	//call the map object to show task location on the map
+		     public void onClick(View v) 
+		     {
+		    	Context context = getApplicationContext();
+		     	Intent intent = new Intent(context, TaskMapActivity.class);
+		     	intent.putExtra("edit_task_id", selectedTask.getTaskId());
+		    	startActivity(intent);
+		     }
+		 });
 	    //get the selected task 
 	    //update name field
 	    ((TextView)popupView.findViewById(R.id.pop_task_name)).setText(selectedTask.getTaskName());
@@ -291,7 +393,10 @@ public class My_Todo_App extends Activity
 			 ((ImageView)popupView.findViewById(R.id.status_light)).setImageDrawable(getResources().getDrawable(R.drawable.atwork));
 		}		
 	    popupWindow.setOutsideTouchable(false);
+   	 	//update the back button state
+	    backDisable = true;
 	    popupWindow.showAsDropDown(this.findViewById(R.id.horizontal_line), 20, -80);
+	    Log.i((String) getTitle(), "Popup window is display");
 	}
 	private void showPopup(final int taskToShowId)
 	{
@@ -309,6 +414,35 @@ public class My_Todo_App extends Activity
 					}
 		    	}, 100);
 		}
+	}
+	/*
+	 * sorting spinner selection methods
+	 * */
+	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) 
+	{
+		String spnrSelTxt = (String)(parent.getItemAtPosition(pos));
+		if(spnrSelTxt.equals(getString(R.string.date_sorting_text)))
+		{
+			sortingMannor = SortingMannor.BY_DUE_DATE;
+		}
+		else if(spnrSelTxt.equals(getString(R.string.importancy_sorting_text)))
+		{
+			sortingMannor = SortingMannor.BY_HIGHER_IMPORTANCY;
+		}
+		else if(spnrSelTxt.equals(getString(R.string.location_sorting_text)))
+		{
+			sortingMannor = SortingMannor.BY_NEAREST_LOCATION;
+		}
+		//call method to resort tasks dal & refresh list according to new sorting algorithm
+		taskDal.sortTasks(sortingMannor);
+		final ListView tasksListView = (ListView) findViewById(R.id.listV_main);
+        //set the listView adapter
+		((BaseAdapter) tasksListView.getAdapter()).notifyDataSetChanged();
+	}
+	public void onNothingSelected(AdapterView<?> arg0) 
+	{
+		//do nothing 
+		return;
 	}
 }
 

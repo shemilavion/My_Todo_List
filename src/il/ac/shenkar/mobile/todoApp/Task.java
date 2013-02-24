@@ -155,15 +155,6 @@ public class Task implements Comparable
 	{
 		Task compTask = (Task)another;
 		int returnVal = 0;
-		//order by importancy
-		//if(compTask.importancy.ordinal() < this.importancy.ordinal() )
-		//{
-		//	returnVal = -1;
-	//	}
-	//	else if(compTask.importancy.ordinal() > this.importancy.ordinal() )
-	//	{
-	//		returnVal = 1;
-	//	}
 		//order by insertion date
 		if(compTask.startDate.after(this.startDate) )
 		{

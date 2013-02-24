@@ -7,14 +7,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.example.my_todo_app.R;
+import com.google.analytics.tracking.android.Log;
 
 public class Notifyer extends BroadcastReceiver
 {
 	  @SuppressWarnings("deprecation")
 	public void onReceive(Context context, Intent incomeIntent)
 	  {
+		  Log.i("Notifier Class received massage to notify: "+incomeIntent.getExtras());
 		//create the notification
 		  final int taskToShowId = incomeIntent.getIntExtra("notified_taskId", -1);
 		  Dal taskDal = Dal.getDal(context);
@@ -32,7 +32,8 @@ public class Notifyer extends BroadcastReceiver
 			  myNotification.defaults |= Notification.DEFAULT_SOUND;
 			  myNotification.flags |= Notification.FLAG_AUTO_CANCEL;
 			  myNotification.setLatestEventInfo(context, notificationTitle, notificationText, pendingIntent);
-			  notificationManager.notify(0, myNotification);			  	  
+			  notificationManager.notify(0, myNotification);	
+			  Log.i("Notifier Class sent the notifications"); 
 		  }
 			  	  
 

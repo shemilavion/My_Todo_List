@@ -1,6 +1,5 @@
 package il.ac.shenkar.mobile.todoApp;
 
-import com.example.my_todo_app.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;

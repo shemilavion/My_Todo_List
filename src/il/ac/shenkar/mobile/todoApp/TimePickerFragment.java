@@ -3,7 +3,7 @@ package il.ac.shenkar.mobile.todoApp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import com.example.my_todo_app.R;
+import com.google.analytics.tracking.android.Log;
 import android.annotation.SuppressLint;
 import android.app.TimePickerDialog;
 import android.app.Dialog;
@@ -25,6 +25,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState)
 	{
+		Log.i("Time Picker was fragment created");
 		// Use the current time as the default time in the picker + 30 min
 		final Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(c.getTimeInMillis()+1800000);
@@ -36,6 +37,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 	
 	public void onTimeSet(TimePicker view, int hour, int minute) 
 	{
+		Log.i("Time Chose: "+hour+":"+minute);
 		Button time = (Button) getActivity().findViewById(R.id.new_task_time);
 		//create calendar object & update the  hour & minute values
 		cal.set(Calendar.HOUR_OF_DAY, hour);

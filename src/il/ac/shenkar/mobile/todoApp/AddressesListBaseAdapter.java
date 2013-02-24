@@ -3,11 +3,9 @@ package il.ac.shenkar.mobile.todoApp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-
 import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;
@@ -19,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.my_todo_app.R;
 
 public class AddressesListBaseAdapter extends BaseAdapter
 {

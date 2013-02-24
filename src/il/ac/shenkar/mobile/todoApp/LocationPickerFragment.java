@@ -2,13 +2,13 @@ package il.ac.shenkar.mobile.todoApp;
 
 import java.io.IOException;
 import java.util.List;
-import com.example.my_todo_app.R;
 import android.annotation.SuppressLint;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +28,6 @@ import android.widget.AdapterView.OnItemClickListener;
 public class LocationPickerFragment extends DialogFragment
 {
 	private Context caller;
-	private ViewGroup contain;
 	private Geocoder geoc;
 	private List<Address> addreses ;
 	private Address selectedAdd=null;
@@ -47,7 +46,7 @@ public class LocationPickerFragment extends DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) 
     {
-    	contain = container;
+    	Log.i("Location Picker", "Location Picker was created");
 	    final View view = inflater.inflate(R.layout.address_picker, container, false);
 	    getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 	    ((Button) view.findViewById(R.id.search_button)).setOnClickListener(new OnClickListener() 

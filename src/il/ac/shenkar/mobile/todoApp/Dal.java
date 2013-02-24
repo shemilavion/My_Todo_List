@@ -3,6 +3,7 @@ package il.ac.shenkar.mobile.todoApp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * this class is the data access layer for the tasks
@@ -71,6 +73,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
     @Override
     public void onCreate(SQLiteDatabase db) 
     {
+    	Log.i("DAL", "Creating DataBase");
         String CREATE_TASKS_TABLE = "CREATE TABLE " + TABLE_TASKS + "("
         		+ KEY_ID   	     + " INTEGER PRIMARY KEY AUTOINCREMENT,"	//the id of each task must be unique - so its defined as AUTOINCREMENT
         		+KEY_SERVER_ID	 + " TEXT,"
@@ -92,15 +95,18 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
                 + KEY_LON  		 + " REAL,"
                 + KEY_DONE  	 + " INTEGER" + ")";
         db.execSQL(CREATE_TASKS_TABLE);
+        Log.i("DAL", "DataBase was created");
     }
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
+    	Log.i("DAL", "upgrading DataBase");
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TASKS);
         // Create tables again
         onCreate(db);
+        Log.i("DAL", "DataBase was upgrade");
     }
 	//task getter according to position in db 
 	public Task	getTask(int position)
@@ -170,6 +176,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	//add task to db & return the task id
 	public long addTask(Task newTask) 
     {
+		Log.i("DAL", "Adding new task to DB");
     	//get the database object
         SQLiteDatabase db = this.getWritableDatabase();
         //create content values object
@@ -196,6 +203,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
         values.put(KEY_DONE, newTask.isDone()); 									// Contact Name
         // Insert the Row
         long id = db.insert(TABLE_TASKS, null, values);
+        Log.i("DAL", "nwe task was added to DB");
         db.close(); // Closing database connection
         //after task added to db - update tasks list
         syncDal();
@@ -207,6 +215,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	@SuppressWarnings("unchecked")
 	public void deleteTask(Task task)
 	{
+		Log.i("DAL", "Deleting task "+ task.getTaskName());
 		//delete task from db
 	    SQLiteDatabase db = this.getWritableDatabase();
 	    db.delete(TABLE_TASKS, KEY_ID + " = ?",
@@ -226,7 +235,8 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 			}
 			i++;
 		}
-		Collections.sort(tmpTasksList);
+		Log.i("DAL", "Task: "+task.getTaskName()+" was deleted");
+		this.sortTasks(((My_Todo_App)mainListActivityContext).sortingMannor);
 		tasksList = tmpTasksList;
 		((My_Todo_App)mainListActivityContext).onResume();
 	}
@@ -235,6 +245,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	//sync all tasks from db to local array
 	public void syncDal()
 	{
+		Log.i("DAL", "sync all tasks from db to local array");
 		ArrayList<Task> tasksList = new ArrayList<Task>();
 		// Select All Query
 		String selectQuery = "SELECT  * FROM " + TABLE_TASKS;
@@ -253,6 +264,7 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 		db.close();
 		// update local contact list
 		this.tasksList = tasksList;
+		Log.i("DAL", "sync is done");
 	}
 
 	
@@ -285,5 +297,36 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	            (cursor.getInt(18) == 1)	//done flag
 	            );
 	    return task;
+	}
+	public void sortTasks(SortingMannor sortMannor)
+	{
+		final SortingMannor srtMnr = sortMannor;
+		Collections.sort(tasksList, new Comparator<Task>()
+				{
+			  		public int compare(Task task1, Task task2) 
+			  		{
+			  			if(srtMnr == SortingMannor.BY_DUE_DATE)
+			  			{
+			  				return 1;
+			  			}
+			  			else if(srtMnr == SortingMannor.BY_HIGHER_IMPORTANCY)
+			  			{
+			  				//order by importance
+			  				if(task2.getImportancy().ordinal() < task1.getImportancy().ordinal() )
+			  				{
+			  					return -1;
+			  				}
+			  				else if(task2.getImportancy().ordinal() > task1.getImportancy().ordinal() )
+			  				{
+			  					return  1;
+			  				}
+			  			}
+			  			else if(srtMnr == SortingMannor.BY_NEAREST_LOCATION)
+			  			{
+			  				return 1;
+			  			}
+			  			return 1;
+			  		}
+			  });
 	}
 }

@@ -8,9 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import com.example.my_todo_app.R;
-
+import com.google.analytics.tracking.android.EasyTracker;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -27,6 +25,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -43,6 +42,19 @@ import android.support.v4.app.NavUtils;
 @SuppressLint({ "NewApi", "NewApi", "NewApi", "SimpleDateFormat" })
 public class NewTaskActivity extends Activity
 {
+	@Override
+	protected void onStart() {
+		super.onStart();
+		// for google analytic 
+		EasyTracker.getInstance().activityStart(this);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		// for google analytic 
+		EasyTracker.getInstance().activityStop(this);
+	}
 	private Dal taskDal = null;
 	private DialogFragment dateFragment;
 	private DialogFragment timeFragment;
@@ -61,6 +73,7 @@ public class NewTaskActivity extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+    	Log.i((String) getTitle(), "onCreate, new task Activity was create");
     	editedId = -1;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_task);
@@ -75,6 +88,7 @@ public class NewTaskActivity extends Activity
         int taskToEditId = incomeIntent.getIntExtra("edit_task_id", -1);
         if(taskToEditId != -1)
         {
+        	Log.i((String) getTitle(), "Activity was open in 'Editing' mood, loading task data to relevant fieldss");
         	editedId = taskToEditId;
         	((Button)findViewById(R.id.create_button)).setText(getString (R.string.save_changes));
         	//call method to display task data
@@ -87,6 +101,7 @@ public class NewTaskActivity extends Activity
 	protected void onResume() 
     {
 		super.onResume();
+		Log.i((String) getTitle(), "onResume, new task Activity was resumed");
 		if(editedId == -1)
 		{
 			GregorianCalendar cal = new GregorianCalendar();
@@ -138,6 +153,7 @@ public class NewTaskActivity extends Activity
     }
     public void getRandomTask(View v)
     {
+    	Log.i((String) getTitle(), "bringing random task from server");
     	//create url
  		URL tasksServerUrl = null;
  		//check network state
@@ -189,6 +205,7 @@ public class NewTaskActivity extends Activity
     //pick a location method - called when location button picked on new task activity 
     public void pickLocation(View view)
 	{
+    	Log.i((String) getTitle(), "Pick location fragment initialising...");
     	FragmentManager = getFragmentManager();
         //create & show the location picker
     	locationFragment.show(FragmentManager, locationFragmentTag);
@@ -205,12 +222,14 @@ public class NewTaskActivity extends Activity
     }
     public void createTask(View view)
     {
+    	Log.i((String) getTitle(), "creating new task...");
     	//case of editing mode - delete old task first
     	if(editedId != -1)
     	{
     		taskDal.deleteTask(taskDal.getTaskById(editedId));
     	}
     	Task newTask = new Task();
+    	Log.i((String) getTitle(), "start geting task data from GUI...");
     	//get task name from gui
     	EditText editText = (EditText) findViewById(R.id.new_task_name);
     	newTask.setTaskName(editText.getText().toString());
@@ -239,18 +258,23 @@ public class NewTaskActivity extends Activity
     	//get notify flag
     	CheckBox checkBox = (CheckBox) findViewById(R.id.notify_c_box);
     	newTask.setNotifyFlag(checkBox.isChecked());
-
+    	
+    	Log.i((String) getTitle(), "finish getting all the data from GUI");
+    	Log.i((String) getTitle(), "validating Data...");
     	if(! newTask.validateTask() )
     	{
     		Toast.makeText(getApplicationContext(), "Fill all required Fields", Toast.LENGTH_LONG).show();
+    		Log.i((String) getTitle(), "new task data isn't validate...");
     		return;
     	}
+    	Log.i((String) getTitle(), "new task data is validate...");
     	//insert new task into db
     	long newTaskId = taskDal.addTask(newTask);
-   	
+    	
     	//set a notification if needed
     	if(newTask.getNotifyFlag())
     	{
+    		Log.i((String) getTitle(), "Setting notification...");
 	    	//////////////////////////////////////////////////////////////////////////////////////////////
 	    	//	for time debugging																		//
 	    	//	System.out.println(newTask.getDueDate().toString());									//
@@ -352,6 +376,7 @@ public class NewTaskActivity extends Activity
  	  // creating the progress dialog
     public void myProgressDialogStart(String msg)
      {
+    	Log.i((String) getTitle(), "Starting progress dialog");
      	//building the progress dialog
          this.progressDialod = new ProgressDialog(this);
          progressDialod.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -364,6 +389,7 @@ public class NewTaskActivity extends Activity
     //canceling the progress dialog
     public void myProgressDialogStop() 
     {
+    	Log.i((String) getTitle(), "stoping progress dialog");
     	this.progressDialod.cancel();
     }
  	public void closeKeyBoard()

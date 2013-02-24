@@ -1,13 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.my_todo_app"
+    package="il.ac.shenkar.mobile.todoApp"
     android:versionCode="1"
     android:versionName="1.0" >
-    <uses-permission android:name="android.permission.INTERNET"/>     
+    <permission
+        android:name="il.ac.shenkar.mobile.todoApp.MAPS_RECIEVE"
+        android:protectionLevel="signature"
+    />
+    <uses-feature 
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
+    <uses-permission android:name="il.ac.shenkar.mobile.todoApp.permissions.MAPS_RECIEVE"/>     
+    <uses-permission android:name="android.permission.INTERNET"/>  
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="17" />
     <application
         android:icon="@drawable/ic_launcher"
@@ -37,6 +47,20 @@
         <activity
             android:name="il.ac.shenkar.mobile.todoApp.NewTaskActivity"
             android:label="@string/title_activity_new_task" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="il.ac.shenkar.mobile.todoApp.My_Todo_App" />
+        </activity>
+        <uses-library android:name="com.google.android.maps" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBjFYGN2SHd2QSLp2Nhn-L21JpRDmCzDz4" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyBUlGegvRl94jTFJcwfgjwUOL4U413z5jM" />
+        <activity
+            android:name="il.ac.shenkar.mobile.todoApp.TaskMapActivity"
+            android:label="@string/title_activity_task_map" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="il.ac.shenkar.mobile.todoApp.My_Todo_App" />

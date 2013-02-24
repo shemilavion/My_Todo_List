@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /*
  * this class intended to grab task data from server & insert a new task into tasks db
@@ -46,6 +47,7 @@ public class AsyncTaskSyncServer extends AsyncTask<URL, Integer, String>
 	protected void onPostExecute(String result) 
 	{
 		super.onPostExecute(result);
+		Log.i("onPostExecute(),", "creating task from web response");
 		JSONObject taskJson = null;
 		Task randomTask = new Task();
 		try 

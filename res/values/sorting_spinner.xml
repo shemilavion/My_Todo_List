@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sorting_mannor">
+        <item>@string/date_sorting_text</item>
+        <item>@string/importancy_sorting_text</item>
+        <item>@string/location_sorting_text</item>
+    </string-array>
+</resources>
