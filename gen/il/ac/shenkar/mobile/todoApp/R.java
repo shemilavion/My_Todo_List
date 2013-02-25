@@ -313,6 +313,7 @@ containing a value of this type.
         public static final int ga_trackingId=0x7f05000b;
         public static final int hello_world=0x7f050012;
         public static final int importancy_sorting_text=0x7f05003c;
+        public static final int loc_prob=0x7f05003e;
         public static final int location_nullness=0x7f050037;
         public static final int location_picker=0x7f050030;
         public static final int location_sorting_text=0x7f05003d;

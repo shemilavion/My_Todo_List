@@ -147,6 +147,7 @@ int string enter_task_name 0x7f050018
 int string ga_trackingId 0x7f05000b
 int string hello_world 0x7f050012
 int string importancy_sorting_text 0x7f05003c
+int string loc_prob 0x7f05003e
 int string location_nullness 0x7f050037
 int string location_picker 0x7f050030
 int string location_sorting_text 0x7f05003d

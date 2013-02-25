@@ -6,19 +6,24 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * this class is the data access layer for the tasks
  * */
 public class Dal extends SQLiteOpenHelper implements TasksDal 
 {
+	private final int fixUpdateConst = 30000;
+	private final int topDistnace = 999999999;
 	Context mainListActivityContext;
 	//Static variables
     ArrayList<Task> tasksList = null;
@@ -212,7 +217,6 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	}
     
     //delete single task from db
-	@SuppressWarnings("unchecked")
 	public void deleteTask(Task task)
 	{
 		Log.i("DAL", "Deleting task "+ task.getTaskName());
@@ -300,33 +304,151 @@ public class Dal extends SQLiteOpenHelper implements TasksDal
 	}
 	public void sortTasks(SortingMannor sortMannor)
 	{
+		if(sortMannor != SortingMannor.BY_DUE_DATE && sortMannor != SortingMannor.BY_NEAREST_LOCATION &&
+				sortMannor != SortingMannor.BY_HIGHER_IMPORTANCY )
+		{
+			sortMannor = SortingMannor.BY_DUE_DATE;
+		}
 		final SortingMannor srtMnr = sortMannor;
 		Collections.sort(tasksList, new Comparator<Task>()
 				{
+					int toastCount = 1;
 			  		public int compare(Task task1, Task task2) 
 			  		{
-			  			if(srtMnr == SortingMannor.BY_DUE_DATE)
+			  			//first put all done tasks at the end
+			  			int ans = 0;
+			  			if(task1.isDone())
 			  			{
 			  				return 1;
 			  			}
-			  			else if(srtMnr == SortingMannor.BY_HIGHER_IMPORTANCY)
+			  			if(task2.isDone())
 			  			{
-			  				//order by importance
-			  				if(task2.getImportancy().ordinal() < task1.getImportancy().ordinal() )
+			  				return -1;
+			  			}	
+			  			//now decide which sorting method taking place
+			  			switch(srtMnr)
+			  			{
+			  				case BY_DUE_DATE:
 			  				{
-			  					return -1;
+			  					if(task1.getDueDate().getTimeInMillis() < task2.getDueDate().getTimeInMillis())
+			  					{
+			  						ans = 1;
+			  					}
+			  					else
+			  					{
+			  						ans = -1;
+			  					}
+			  					break;
 			  				}
-			  				else if(task2.getImportancy().ordinal() > task1.getImportancy().ordinal() )
+			  				case BY_HIGHER_IMPORTANCY:
 			  				{
-			  					return  1;
+			  					if(task1.getImportancy().ordinal() < task2.getImportancy().ordinal())
+			  					{
+			  						ans = 1;
+			  					}
+			  					else
+			  					{
+			  						ans = -1;
+			  					}
+			  					break;
+			  				}
+			  				case BY_NEAREST_LOCATION:
+			  				{
+			  					double distance1=1, distance2=2;
+			  					boolean validFix = false;
+			  					if(task1.getTaskLat() == -1)
+			  					{
+			  						distance1 = topDistnace;
+			  					}
+			  					if(task2.getTaskLat() == -1)
+			  					{
+			  						distance2 = topDistnace;
+			  					}
+			  					//calculate distance to destination from my location
+			  					//get the location service & create criteria
+			  					LocationManager locMan = (LocationManager) mainListActivityContext
+			  							.getSystemService(Context.LOCATION_SERVICE);
+			  					Criteria crit = new Criteria();
+			  					//set accuracy to fine - try GPS first...
+			  					crit.setAccuracy(Criteria.ACCURACY_FINE);
+			  					String provider = locMan.getBestProvider(crit, true);
+			  					Location loc = null;
+			  					long fixTime = 0;
+				  				//if gps location avail...
+								if(provider != null)
+								{
+									loc = locMan.getLastKnownLocation(provider);
+									if(loc != null)
+									{
+										fixTime = loc.getTime();
+										validFix = true;
+									}
+								}
+								//set accuracy to course - try network now...
+			  					crit.setAccuracy(Criteria.ACCURACY_COARSE);
+			  					provider = locMan.getBestProvider(crit, true);
+			  					if(provider != null)
+			  					{
+			  						loc = locMan.getLastKnownLocation(provider);
+			  						if(loc != null)
+			  						{
+			  							long netFixTime = loc.getTime();
+			  							if(netFixTime > fixTime)
+			  							{
+			  								fixTime = netFixTime;
+			  							}
+			  							validFix = true;
+			  						}
+			  					}
+			  				//DEBUG only! print fix update time 
+//			  					GregorianCalendar fixCal = new GregorianCalendar();
+//			  					fixCal.setTimeInMillis(fixTime);
+//			  					SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
+//			  					System.out.println(sdf.format(fixCal.getTime()));
+			  				//END OF DEBUG ONLY SECTION
+			  					//check fix relevance
+			  					if( (System.currentTimeMillis() - fixTime) < fixUpdateConst && validFix == true)
+			  					{
+			  						Location dest = new Location(provider);
+			  						dest.setLatitude(task1.getTaskLat());
+			  						dest.setLongitude(task1.getTaskLong());
+			  						if(distance1 != topDistnace)
+			  						{
+			  							distance1 = loc.distanceTo(dest);
+			  						}
+			  						dest.setLatitude(task2.getTaskLat());
+			  						dest.setLongitude(task2.getTaskLong());
+			  						if(distance1 != topDistnace)
+			  						{
+			  							distance2 = loc.distanceTo(dest);
+			  						}
+			  					}
+			  					else
+			  					{
+			  						if(toastCount >0 )
+			  						{
+				  						CharSequence text = mainListActivityContext.getString(R.string.loc_prob);
+				  						int duration = Toast.LENGTH_SHORT;
+				  						Toast toast = Toast.makeText(mainListActivityContext, text, duration);
+				  						toast.show();
+				  						toastCount--;
+			  						}
+			  						return 1;
+			  					}
+			  					if(distance1 > distance2)
+			  					{
+			  						ans = 1;
+			  					}
+			  					else
+			  					{
+			  						ans = -1;
+			  					}
+			  					break;
 			  				}
 			  			}
-			  			else if(srtMnr == SortingMannor.BY_NEAREST_LOCATION)
-			  			{
-			  				return 1;
-			  			}
-			  			return 1;
+			  			return ans;
 			  		}
 			  });
+		
 	}
 }

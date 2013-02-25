@@ -1,11 +1,8 @@
 package il.ac.shenkar.mobile.todoApp;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 import android.content.Context;
 import android.location.Address;
 import android.location.Criteria;
@@ -71,8 +68,10 @@ public class AddressesListBaseAdapter extends BaseAdapter
 		//set address to list item
 		holder.txt_address.setText(addreses.get(position).getAddressLine(0));
 		holder.txt_state.setText(addreses.get(position).getAddressLine(1));
+		
 		//calculate distance to destination from my location
 		//get the location service & create criteria
+		boolean legalFix = false;
 		LocationManager locMan = (LocationManager) cont.getSystemService(Context.LOCATION_SERVICE);
 		Criteria crit = new Criteria();
 		//set accuracy to fine - try GPS first...
@@ -84,29 +83,37 @@ public class AddressesListBaseAdapter extends BaseAdapter
 		//if gps location avail...
 		if(provider != null)
 		{
-			loc = locMan.getLastKnownLocation(provider);	
-			fixTime = loc.getTime(); 
+			loc = locMan.getLastKnownLocation(provider);
+			if(loc != null)
+			{	
+				fixTime = loc.getTime();
+				legalFix = true;
+			}
 		}
 		//set accuracy to course - try network now...
 		crit.setAccuracy(Criteria.ACCURACY_COARSE);
 		provider = locMan.getBestProvider(crit, true);
 		if(provider != null)
 		{
-			loc = locMan.getLastKnownLocation(provider);	
-			long netFixTime = loc.getTime();
-			if(netFixTime > fixTime)
+			loc = locMan.getLastKnownLocation(provider);
+			if(loc != null)
 			{
-				fixTime = netFixTime;
+				long netFixTime = loc.getTime();
+				if(netFixTime > fixTime)
+				{
+					fixTime = netFixTime;
+				}
+				legalFix = true;
 			}
 		}
 	//DEBUG only! print fix update time 
-		GregorianCalendar fixCal = new GregorianCalendar();
-		fixCal.setTimeInMillis(fixTime);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
-		System.out.println(sdf.format(fixCal.getTime()));
+//		GregorianCalendar fixCal = new GregorianCalendar();
+//		fixCal.setTimeInMillis(fixTime);
+//		SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy - HH:mm",Locale.CANADA);
+//		System.out.println(sdf.format(fixCal.getTime()));
 	//END OF DEBUG ONLY SECTION
 		//check fix relevance
-		if( (System.currentTimeMillis() - fixTime) < fixUpdateConst )
+		if( (System.currentTimeMillis() - fixTime) < fixUpdateConst && legalFix == true)
 		{
 			Location dest = new Location(provider);
 			dest.setLatitude(addreses.get(position).getLatitude());

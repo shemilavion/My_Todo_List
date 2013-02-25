@@ -54,10 +54,10 @@
         <uses-library android:name="com.google.android.maps" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBjFYGN2SHd2QSLp2Nhn-L21JpRDmCzDz4" />
+            android:value="AIzaSyBUlGegvRl94jTFJcwfgjwUOL4U413z5jM" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyBUlGegvRl94jTFJcwfgjwUOL4U413z5jM" />
+            android:value="AIzaSyBjFYGN2SHd2QSLp2Nhn-L21JpRDmCzDz4" />
         <activity
             android:name="il.ac.shenkar.mobile.todoApp.TaskMapActivity"
             android:label="@string/title_activity_task_map" >
