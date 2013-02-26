@@ -38,15 +38,19 @@
         <activity
             android:launchMode="singleTop"
             android:name="il.ac.shenkar.mobile.todoApp.My_Todo_App"
-            android:label="@string/title_activity_my__todo__app" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/title_activity_my__todo__app" 
+            android:screenOrientation="portrait"
+            android:configChanges="orientation">
+			  	<intent-filter>
+                	<action android:name="android.intent.action.MAIN" />
+                	<category android:name="android.intent.category.LAUNCHER" />
+            	</intent-filter>
         </activity>
         <activity
             android:name="il.ac.shenkar.mobile.todoApp.NewTaskActivity"
-            android:label="@string/title_activity_new_task" >
+            android:label="@string/title_activity_new_task"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="il.ac.shenkar.mobile.todoApp.My_Todo_App" />
@@ -55,7 +59,7 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBUlGegvRl94jTFJcwfgjwUOL4U413z5jM" />
-        <meta-data
+                <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBjFYGN2SHd2QSLp2Nhn-L21JpRDmCzDz4" />
         <activity

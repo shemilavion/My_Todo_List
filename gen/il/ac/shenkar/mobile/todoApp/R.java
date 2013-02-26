@@ -246,6 +246,7 @@ containing a value of this type.
         public static final int activity_new_task=0x7f090001;
     }
     public static final class string {
+        public static final int Google_Analytic_ID=0x7f05003f;
         public static final int address_distance_suffix=0x7f050036;
         public static final int app_name=0x7f05000c;
         public static final int button_add=0x7f05000d;

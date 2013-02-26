@@ -51,4 +51,5 @@
 	<string name="importancy_sorting_text">Sort By Priority</string>
 	<string name="location_sorting_text">Sort by Location</string>
 	<string name="loc_prob">Location Problem, check location services</string>
+	<string name="Google_Analytic_ID">UA-38750846-1</string>
 </resources>

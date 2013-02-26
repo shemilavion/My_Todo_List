@@ -6,6 +6,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
+
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -49,6 +52,11 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	public SortingMannor sortingMannor = SortingMannor.BY_DUE_DATE;
 	//back button disable flag - if set to false - no disable will be applied, used for popup ...
 	private boolean backDisable = false;
+	private Tracker myTracker;
+	private GoogleAnalytics myGaInstance;
+
+	
+	
 	@Override
 	protected void onStart() 
 	{
@@ -73,6 +81,12 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        // Get the GoogleAnalytics singleton. Note that the SDK uses
+        // the application context to avoid leaking the current context.
+        myGaInstance = GoogleAnalytics.getInstance(this);
+        // Use the GoogleAnalytics singleton to get a Tracker.
+        myTracker = myGaInstance.getTracker(getString(R.string.Google_Analytic_ID));	 // Placeholder tracking ID from Strings XML
+        
         taskDal = Dal.getDal(this);
         setContentView(R.layout.activity_my__todo__app);
         Log.i((String) getTitle(),"onCreste(), Main Activity Created" );
@@ -137,7 +151,9 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	public void addTask(View view) 		//open "add task" activity in response to button
     {
 		Log.i((String) getTitle(),"addTask(), openning new Activity" );
-    	Intent intent = new Intent(this, NewTaskActivity.class);
+		// send data to google analytic 
+		 myTracker.sendEvent("ui_action", "button_press", "new_task_button", null);
+		Intent intent = new Intent(this, NewTaskActivity.class);
     	startActivity(intent);
     }
     @Override
@@ -189,14 +205,20 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 		    {
 		        switch (which){
 		        case DialogInterface.BUTTON_POSITIVE:
+		        	// send data to google analytic 
+			 		myTracker.sendEvent("ui_action", "button_press", "confirm_delete_yes_button", null);
 		        	Log.i((String) getTitle(), "'Yes' button pressed, delete task option chose");
 		        	//yes button pressed
 		        	//delete the task
 		    		Task currTask = taskDal.getTaskById(taskId);
 		    		taskDal.deleteTask(currTask);
+		    		// send data to google analytic 
+		        	myTracker.sendEvent("task_action", "task_deleted", "task_deleted", null);
 		            break;
 
 		        case DialogInterface.BUTTON_NEGATIVE:
+		        	// send data to google analytic 
+			 		myTracker.sendEvent("ui_action", "button_press", "confirm_delete_no_button", null);
 		        	Log.i((String) getTitle(), "'No' button pressed, Dismissing confermation dialog");
 		            //No button clicked
 		            break;
@@ -226,11 +248,15 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 		final ListView tasksListView = (ListView) findViewById(R.id.listV_main);
         //set the listView adapter
 		((BaseAdapter) tasksListView.getAdapter()).notifyDataSetChanged();
+		// send data to google analytic 
+    	myTracker.sendEvent("task_action", "task_done", "task_is_done", null);
 	}	
 
 	public void showTask(int taskId)
 	{
 		final Task selectedTask = taskDal.getTaskById(taskId);
+		// send data to google analytic 
+		myTracker.sendEvent("ui_action", "button_press", "task_item_list_button", null);
 		//if task doesnt exist - return to caller
 		if(selectedTask == null)
 		{
@@ -254,7 +280,9 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	    btnDismiss.setOnClickListener(new Button.OnClickListener()
 	    {
 		     public void onClick(View v) 
-		     {	
+		     {
+		    	 // send data to google analytic 
+		 		 myTracker.sendEvent("ui_action", "button_press", "popup_back_button", null);
 		    	 //update to back button state
 		    	 backDisable = false;
 		    	 popupWindow.dismiss();
@@ -267,6 +295,8 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	    {
 		     public void onClick(View v) 
 		     {
+		    	// send data to google analytic 
+		 		myTracker.sendEvent("ui_action", "button_press", "popup_edit_button", null); 
 		    	Context context = getApplicationContext();
 		     	Intent intent = new Intent(context, NewTaskActivity.class);
 		     	intent.putExtra("edit_task_id", selectedTask.getTaskId());
@@ -283,6 +313,8 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	    {
 		     public void onClick(View v) 
 		     {
+		    	// send data to google analytic 
+		 		myTracker.sendEvent("ui_action", "button_press", "popup_delete_button", null);
 		    	Log.i((String) getTitle(), "'Delete' button pressed, openning confermation dialog");
 		 		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() 
 				{	
@@ -292,6 +324,8 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 				        case DialogInterface.BUTTON_POSITIVE:
 				        	//yes button pressed
 				        	//delete task from dal
+				        	// send data to google analytic 
+					 		myTracker.sendEvent("ui_action", "button_press", "popup_confirm_delete_yes_button", null);
 				        	Log.i((String) getTitle(), "'Yes' button pressed, delete task option chose");
 				        	taskDal.deleteTask(selectedTask);
 					    	//update the back button state
@@ -300,6 +334,8 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 				            break;
 
 				        case DialogInterface.BUTTON_NEGATIVE:
+				        	// send data to google analytic 
+					 		myTracker.sendEvent("ui_action", "button_press", "popup_confirm_delete_no_button", null);
 				        	Log.i((String) getTitle(), "'No' button pressed, Dismissing confermation dialog");
 				            //No button clicked
 				            break;
@@ -318,6 +354,8 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	    btnsShare.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
+				// send data to google analytic 
+		 		myTracker.sendEvent("ui_action", "button_press", "popup_Share_button", null);
 				// Creating the massage i want to Share"
 				String msgToShare = "Task Title: "+selectedTask.getTaskName() + "\n" +"Task Description: "+ selectedTask.getTaskDescription() +"\n" +
 								"Task Due Date: "+sdf.format(selectedTask.getDueDate().getTime());
@@ -350,6 +388,9 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	    	//call the map object to show task location on the map
 		     public void onClick(View v) 
 		     {
+		    	// send data to google analytic 
+			 	myTracker.sendEvent("ui_action", "button_press", "popup_location_button", null);
+			 	Log.i((String) getTitle(), "'location' button pressed, opening Map View");
 		    	Context context = getApplicationContext();
 		     	Intent intent = new Intent(context, TaskMapActivity.class);
 		     	intent.putExtra("edit_task_id", selectedTask.getTaskId());
@@ -420,17 +461,24 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 	 * */
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) 
 	{
+		
 		String spnrSelTxt = (String)(parent.getItemAtPosition(pos));
 		if(spnrSelTxt.equals(getString(R.string.date_sorting_text)))
 		{
+			// send data to google analytic 
+	 		myTracker.sendEvent("ui_action", "button_press", "sort_item_by_due_date_button", null);
 			sortingMannor = SortingMannor.BY_DUE_DATE;
 		}
 		else if(spnrSelTxt.equals(getString(R.string.importancy_sorting_text)))
 		{
+			// send data to google analytic 
+	 		myTracker.sendEvent("ui_action", "button_press", "sort_item_By_praiority_button", null);
 			sortingMannor = SortingMannor.BY_HIGHER_IMPORTANCY;
 		}
 		else if(spnrSelTxt.equals(getString(R.string.location_sorting_text)))
 		{
+			// send data to google analytic 
+	 		myTracker.sendEvent("ui_action", "button_press", "sort_item_by_location_button", null);
 			sortingMannor = SortingMannor.BY_NEAREST_LOCATION;
 		}
 		//call method to resort tasks dal & refresh list according to new sorting algorithm

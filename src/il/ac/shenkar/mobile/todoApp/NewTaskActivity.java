@@ -9,6 +9,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
+
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
@@ -70,9 +73,19 @@ public class NewTaskActivity extends Activity
 	private int PRE_NOTIFY_TIME_IN_MILLES = 300000;
 	//date picker fragment
 	 FragmentManager FragmentManager;
+	 private Tracker myTracker;
+	private GoogleAnalytics myGaInstance;
+		
+		
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+    	 // Get the GoogleAnalytics singleton. Note that the SDK uses
+        // the application context to avoid leaking the current context.
+        myGaInstance = GoogleAnalytics.getInstance(this);
+        // Use the GoogleAnalytics singleton to get a Tracker.
+        myTracker = myGaInstance.getTracker(getString(R.string.Google_Analytic_ID));	 // Placeholder tracking ID from Strings XML
+
     	Log.i((String) getTitle(), "onCreate, new task Activity was create");
     	editedId = -1;
         super.onCreate(savedInstanceState);
@@ -137,22 +150,32 @@ public class NewTaskActivity extends Activity
     
     public void backToMainScreen(View view)
     {
+    	// send data to google analytic 
+    	myTracker.sendEvent("task_action", "task_created", "new_task_created", null);
     	finish();
     }
     public void pickDate(View v)
     {
+    	// send data to google analytic 
+    	myTracker.sendEvent("ui_action", "button_press", "pick_date_button", null);
+    	Log.i("New Task Activity", "pickdate button chose");
     	FragmentManager = getFragmentManager();
         //create & show the date picker
     	dateFragment.show(FragmentManager, dateFragmentTag); 
     }
     public void pickTime(View v)
     {
+    	// send data to google analytic 
+    	myTracker.sendEvent("ui_action", "button_press", "pick_time_button", null);
+    	Log.i("New Task Activity", "pickdate button chose");
     	FragmentManager = getFragmentManager();
         //create & show the time picker
     	timeFragment.show(FragmentManager, timeFragmentTag);
     }
     public void getRandomTask(View v)
     {
+    	// send data to google analytic 
+    	myTracker.sendEvent("ui_action", "button_press", "random_task_button", null);
     	Log.i((String) getTitle(), "bringing random task from server");
     	//create url
  		URL tasksServerUrl = null;
@@ -174,6 +197,8 @@ public class NewTaskActivity extends Activity
     						  .setPositiveButton("OK",new DialogInterface.OnClickListener() {
     							public void onClick(DialogInterface dialog,int id) {
     								// if this button is clicked, close the dilaog
+    								// send data to google analytic 
+    						 		myTracker.sendEvent("ui_action", "button_press", "no_internet_connection_ok_button", null);
     								dialog.cancel();
     								return;
     							}
@@ -194,7 +219,6 @@ public class NewTaskActivity extends Activity
 			}
 			catch (MalformedURLException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	 		//create the async task
@@ -205,6 +229,8 @@ public class NewTaskActivity extends Activity
     //pick a location method - called when location button picked on new task activity 
     public void pickLocation(View view)
 	{
+    	// send data to google analytic 
+    	myTracker.sendEvent("ui_action", "button_press", "pick_lication_button", null);
     	Log.i((String) getTitle(), "Pick location fragment initialising...");
     	FragmentManager = getFragmentManager();
         //create & show the location picker
@@ -222,6 +248,8 @@ public class NewTaskActivity extends Activity
     }
     public void createTask(View view)
     {
+    	// send data to google analytic 
+    	myTracker.sendEvent("ui_action", "button_press", "create_task_button", null);
     	Log.i((String) getTitle(), "creating new task...");
     	//case of editing mode - delete old task first
     	if(editedId != -1)
