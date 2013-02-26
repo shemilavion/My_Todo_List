@@ -29,16 +29,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
@@ -108,6 +111,24 @@ public class NewTaskActivity extends Activity
         	this.fillTaskForm(taskDal.getTaskById(taskToEditId));
         	closeKeyBoard();
         }
+        
+        TextView.OnEditorActionListener enterPresedListemer = new TextView.OnEditorActionListener() {
+			
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
+			{
+				 if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)
+				 {
+					 closeKeyBoard();
+					 return true;
+				 }
+				
+				return false;
+			}
+		};
+		TextView textview = (TextView) findViewById(R.id.new_task_name);
+		textview.setOnEditorActionListener(enterPresedListemer);
+		textview = (TextView) findViewById(R.id.new_task_description);
+		textview.setOnEditorActionListener(enterPresedListemer);
     }
 
     @Override
