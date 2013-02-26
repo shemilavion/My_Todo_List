@@ -56,7 +56,6 @@ public class NewTaskActivity extends Activity
 		// for google analytic 
 		EasyTracker.getInstance().activityStart(this);
 	}
-
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -147,19 +146,11 @@ public class NewTaskActivity extends Activity
 			SimpleDateFormat sdf = new SimpleDateFormat("dd,MMMMM,yyyy");
 			((Button)findViewById(R.id.new_task_date)).setText(sdf.format(cal.getTime()));
 			//set due time field
-			sdf = new SimpleDateFormat("hh:mm");
-			((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTime()));
+			sdf = new SimpleDateFormat("HH:mm");
+			((Button)findViewById(R.id.new_task_time)).setText(sdf.format(cal.getTimeInMillis()));
 		}
 		closeKeyBoard();
 	}
-
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.activity_new_task, menu);
-        return true;
-    }
-
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 

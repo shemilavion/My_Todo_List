@@ -157,12 +157,6 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
     	startActivity(intent);
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) 
-    {
-        getMenuInflater().inflate(R.menu.activity_my__todo__app, menu);
-        return true;
-    }
-    @Override
     public void onNewIntent(Intent intent)
     {
 		final int taskToShowId = intent.getIntExtra("task_id", -1);
@@ -368,35 +362,6 @@ public class My_Todo_App extends Activity implements OnItemSelectedListener
 				Log.i((String) getTitle(), "'Share' button pressed, Sharing task details acording to user input");
 			}
 		});
-	  //location button
-	    Button btnLocation = (Button)popupView.findViewById(R.id.navigate_to_task);
-	    //first check if task have a location. if not, disable button. 
-	    if(selectedTask.getTaskLat() == -1 || selectedTask.getTaskLong() == -1)
-	    {
-	    	btnLocation.setEnabled(false);
-	    	btnLocation.setText(getString(R.string.location_nullness));
-	    }
-	    else
-	    {
-	    	btnLocation.setEnabled(true);
-	    	btnLocation.setText(getString(R.string.show_task_on_map));
-	    }
-	    
-	    btnLocation.setOnClickListener(new Button.OnClickListener()
-	    {
-
-	    	//call the map object to show task location on the map
-		     public void onClick(View v) 
-		     {
-		    	// send data to google analytic 
-			 	myTracker.sendEvent("ui_action", "button_press", "popup_location_button", null);
-			 	Log.i((String) getTitle(), "'location' button pressed, opening Map View");
-		    	Context context = getApplicationContext();
-		     	Intent intent = new Intent(context, TaskMapActivity.class);
-		     	intent.putExtra("edit_task_id", selectedTask.getTaskId());
-		    	startActivity(intent);
-		     }
-		 });
 	    //get the selected task 
 	    //update name field
 	    ((TextView)popupView.findViewById(R.id.pop_task_name)).setText(selectedTask.getTaskName());
