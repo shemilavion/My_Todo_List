@@ -17,6 +17,7 @@ import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -28,6 +29,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -112,19 +114,20 @@ public class NewTaskActivity extends Activity
         	closeKeyBoard();
         }
         
+        // this listener is meant to close the keybord on any "Enter" pressed 
         TextView.OnEditorActionListener enterPresedListemer = new TextView.OnEditorActionListener() {
-			
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
+        	// anonymus inner class of the listener
+        	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
 			{
 				 if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_DOWN)
 				 {
 					 closeKeyBoard();
 					 return true;
 				 }
-				
 				return false;
 			}
 		};
+		// here i attache the listener to both of my text views
 		TextView textview = (TextView) findViewById(R.id.new_task_name);
 		textview.setOnEditorActionListener(enterPresedListemer);
 		textview = (TextView) findViewById(R.id.new_task_description);
@@ -215,6 +218,13 @@ public class NewTaskActivity extends Activity
     		// set dialog message
     		alertDialogBuilder.setMessage(getString(R.string.net_err_msg))
     						  .setCancelable(false)
+    						  .setNegativeButton("Turn On WIFI", new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									//this button will navigate you to the WIFI setting menu
+									// so you could easy turn on the WIFI
+									 startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+								}
+							})
     						  .setPositiveButton("OK",new DialogInterface.OnClickListener() {
     							public void onClick(DialogInterface dialog,int id) {
     								// if this button is clicked, close the dilaog
@@ -313,6 +323,12 @@ public class NewTaskActivity extends Activity
     	if(! newTask.validateTask() )
     	{
     		Toast.makeText(getApplicationContext(), "Fill all required Fields", Toast.LENGTH_LONG).show();
+    		if (newTask.getTaskName().equals(""))
+    			{
+    				editText = (EditText) findViewById(R.id.new_task_name);
+    				editText.setHintTextColor(Color.RED);
+    			}
+    				
     		Log.i((String) getTitle(), "new task data isn't validate...");
     		return;
     	}
